@@ -79,13 +79,44 @@ Explicitly excluded. Documented to prevent scope creep.
 
 Which phases cover which requirements. Updated during roadmap creation.
 
-(To be populated by gsd-roadmapper.)
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| INPUT-01 | Phase 1 | Pending |
+| INPUT-02 | Phase 2 | Pending |
+| INPUT-03 | Phase 2 | Pending |
+| INPUT-04 | Phase 2 | Pending |
+| COW-01 | Phase 1 | Pending |
+| COW-02 | Phase 2 | Pending |
+| COW-03 | Phase 2 | Pending |
+| COW-04 | Phase 2 | Pending |
+| COW-05 | Phase 2 | Pending |
+| COWS-01 | Phase 1 | Pending |
+| COWS-02 | Phase 1 | Pending |
+| COWS-03 | Phase 1 | Pending |
+| COWS-04 | Phase 1 | Pending |
+| COWS-05 | Phase 1 | Pending |
+| RENDER-01 | Phase 1 | Pending |
+| RENDER-02 | Phase 1 | Pending |
+| RENDER-03 | Phase 1 | Pending |
+| RENDER-04 | Phase 1 | Pending |
+| RENDER-05 | Phase 3 | Pending |
+| RENDER-06 | Phase 3 | Pending |
+| RENDER-07 | Phase 3 | Pending |
+| RENDER-08 | Phase 3 | Pending |
+| DIST-01 | Phase 4 | Pending |
+| DIST-02 | Phase 4 | Pending |
+| DIST-03 | Phase 4 | Pending |
+| DIST-04 | Phase 4 | Pending |
+| DIST-05 | Phase 4 | Pending |
+| HELP-01 | Phase 3 | Pending |
 
 **Coverage:**
-- v1 requirements: 27 total
-- Mapped to phases: 0 (pending roadmapper)
-- Unmapped: 27 ⚠️ (will be addressed by roadmap creation)
+- v1 requirements: 28 total (4 INPUT + 5 COW + 5 COWS + 8 RENDER + 5 DIST + 1 HELP)
+- Mapped to phases: 28
+- Unmapped: 0
+
+Note: The requirements file header stated 27 but the defined requirement list contains 28 entries. All 28 are mapped.
 
 ---
 *Requirements defined: 2026-05-18*
-*Last updated: 2026-05-18 after initial definition*
+*Last updated: 2026-05-18 after roadmap creation — traceability table populated*

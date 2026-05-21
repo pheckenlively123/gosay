@@ -1,0 +1,20 @@
+##
+## gopher.cow — hand-authored original ASCII art for the gosay project
+##
+$the_cow = <<EOC;
+     $thoughts
+      $thoughts  .-----.
+               / ($eyes) \
+              |  .---.  |
+              |  | $tongue |  |
+               \ `---' /
+           ,--/`-----'\--.
+          /  |         |  \
+         / \ |  ,---.  | / \
+        /   \| /     \ |/   \
+       |     |/  ,-,  \|     |
+        \    /  /   \  \    /
+         `--' .-`   '-.  `--'
+              |  | |  |
+              `--' `--'
+EOC

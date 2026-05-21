@@ -42,6 +42,8 @@ distributing gosay or any binary that embeds it.
 
 ## gopher.cow
 
-`gopher.cow` is an original work authored for this project and is not vendored
-from the upstream cowsay set.  It is copyright the gosay authors and distributed
-under the project LICENSE.  See project LICENSE for details.
+`gopher.cow` is hand-authored original ASCII art created for the gosay project
+by the project authors.  The Go gopher mascot was designed by Renee French and
+is licensed by Google under CC BY 3.0; this ASCII rendering does not include any
+of Google's gopher artwork and is original work derived from the visual concept.
+It is distributed under the gosay project LICENSE (root of repo).

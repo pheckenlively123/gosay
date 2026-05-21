@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/pheckenlively/gosay/internal/cowsay"
 )
 
 func main() {
@@ -12,5 +14,10 @@ func main() {
 		os.Exit(1)
 	}
 	message := strings.Join(os.Args[1:], " ")
-	fmt.Printf("gosay (walking skeleton): would render gopher saying: %s\n", message)
+	out, err := cowsay.Render("gopher", message, cowsay.RenderOpts{})
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	fmt.Print(out)
 }

@@ -708,22 +708,24 @@ strings.NewReplacer(
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Tag SHA confirmation during execution**
+All open questions have documented resolution paths in the Phase 1 plans. None block planning.
+
+1. **Tag SHA confirmation during execution** — *RESOLVED via Plan 01-02 Task 1.*
    - What we know: GitHub API returns `027c9268ac8571408e153214b9cf1a5e6fab0cfc` as the v3.8.4 tag commit SHA.
    - What's unclear: This may be the tag object SHA, not the commit SHA it points to. `git ls-remote` will disambiguate.
-   - Recommendation: Run `git ls-remote https://github.com/cowsay-org/cowsay refs/tags/v3.8.4^{}` during execution to get the peeled (commit) SHA and record that in `SOURCE.md`.
+   - **Resolution:** Plan 01-02 Task 1 action runs `git ls-remote https://github.com/cowsay-org/cowsay refs/tags/v3.8.4^{}` during execution to get the peeled (commit) SHA and records that in `internal/cowsay/cows/SOURCE.md`. No planning-time blocker.
 
-2. **Non-EOC terminator confirmation**
+2. **Non-EOC terminator confirmation** — *RESOLVED via Plan 01-02 Task 1 audit + Plan 01-03 Task 1 synthetic fixture.*
    - What we know: 13 spot-checked cow files all use `EOC`.
    - What's unclear: There may be a non-EOC file among the 38 unchecked files.
-   - Recommendation: After vendoring, run `grep -r '<<' internal/cowsay/cows/` to audit all terminators. If a non-EOC file is found, use it for the pitfall-targeted test. If none, use the synthetic fixture approach.
+   - **Resolution:** Plan 01-02 Task 1 includes a post-vendor `grep -r '<<' internal/cowsay/cows/` audit to catalog all terminators. Plan 01-03 Task 1 creates `testdata/fixtures/non-eoc.cow` as a synthetic non-EOC fixture, guaranteeing pitfall coverage independent of whether a non-EOC file exists upstream. Either path satisfies RENDER-01.
 
-3. **Gopher ASCII art pick**
+3. **Gopher ASCII art pick** — *RESOLVED via Plan 01-04 Task 1 user-pick checkpoint.*
    - What we know: The structure (12+ lines, `$eyes`/`$tongue`, `$thoughts`) is specified.
    - What's unclear: Which of the 2-3 variants the user prefers.
-   - Recommendation: Draft variants during execution; user picks before commit (D-04).
+   - **Resolution:** Plan 01-04 Task 1 is a `checkpoint:human-verify` gate. The executor drafts 2-3 ASCII variants and the user selects one before `gopher.cow` is committed (D-04). The variant-pick step is an acceptance criterion of the checkpoint.
 
 ---
 

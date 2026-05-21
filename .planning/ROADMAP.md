@@ -13,7 +13,7 @@ gosay ships in four vertical slices. Phase 1 produces a real, runnable binary �
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: First Runnable** - `gosay "hello"` prints a gopher with a speech bubble; parser, balloon, renderer, and CLI wired end-to-end; cows vendored with NOTICE
+- [x] **Phase 1: First Runnable** - `gosay "hello"` prints a gopher with a speech bubble; parser, balloon, renderer, and CLI wired end-to-end; cows vendored with NOTICE (completed 2026-05-21)
 - [ ] **Phase 2: Input and Cow Selection** - stdin, `-f`, `-l`, `--random`, empty input, error handling
 - [ ] **Phase 3: Full Flag Surface** - `--think`, `-W`, `-n`, `-e`, `-T`, runewidth, `-h`/`--help`
 - [ ] **Phase 4: Release Pipeline** - GoReleaser, GitHub Actions, `--version`, `go install`
@@ -50,7 +50,7 @@ Plans:
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 01-04-PLAN.md — Wire-up: gopher.cow (user-pick gate) + main.go calls cowsay.Render + golden tests (gopher + 4 pitfall cows + skipped CJK)
+- [x] 01-04-PLAN.md — Wire-up: gopher.cow (user-pick gate) + main.go calls cowsay.Render + golden tests (gopher + 4 pitfall cows + skipped CJK)
 
 ### Phase 2: Input and Cow Selection
 
@@ -106,7 +106,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. First Runnable | 3/4 | In Progress|  |
+| 1. First Runnable | 4/4 | Complete   | 2026-05-21 |
 | 2. Input and Cow Selection | 0/TBD | Not started | - |
 | 3. Full Flag Surface | 0/TBD | Not started | - |
 | 4. Release Pipeline | 0/TBD | Not started | - |

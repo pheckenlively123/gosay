@@ -46,7 +46,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — Rendering engine: cowfile parser (dynamic terminator + backslash unescape) + balloon (single/multi-line) + renderer (variable substitution)
+- [x] 01-03-PLAN.md — Rendering engine: cowfile parser (dynamic terminator + backslash unescape) + balloon (single/multi-line) + renderer (variable substitution)
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -106,7 +106,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. First Runnable | 2/4 | In Progress|  |
+| 1. First Runnable | 3/4 | In Progress|  |
 | 2. Input and Cow Selection | 0/TBD | Not started | - |
 | 3. Full Flag Surface | 0/TBD | Not started | - |
 | 4. Release Pipeline | 0/TBD | Not started | - |

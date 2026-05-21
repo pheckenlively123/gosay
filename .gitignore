@@ -1,0 +1,5 @@
+# Compiled binary
+gosay
+
+# Go build cache artifacts
+*.test

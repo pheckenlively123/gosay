@@ -38,7 +38,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Walking skeleton: go.mod + .gitattributes + minimal main.go (positional-arg read, stub output)
+- [x] 01-01-PLAN.md — Walking skeleton: go.mod + .gitattributes + minimal main.go (positional-arg read, stub output)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -106,7 +106,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. First Runnable | 0/TBD | Not started | - |
+| 1. First Runnable | 1/4 | In Progress|  |
 | 2. Input and Cow Selection | 0/TBD | Not started | - |
 | 3. Full Flag Surface | 0/TBD | Not started | - |
 | 4. Release Pipeline | 0/TBD | Not started | - |

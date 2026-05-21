@@ -30,7 +30,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The heredoc parser correctly handles a dynamic terminator (not hardcoded `EOC`) and unescapes Perl backslash sequences (`\\` → `\`, `\@` → `@`, `\$` → `$`); golden tests cover both pitfalls
   4. Multi-line input renders with `/ | \` borders and single-line input with `< >` borders
   5. `cows/NOTICE` exists with upstream cowsay-org attribution and per-file license notes; `.gitattributes` enforces `cows/*.cow text eol=lf`
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 01-01-PLAN.md — Walking skeleton: go.mod + .gitattributes + minimal main.go (positional-arg read, stub output)
+- [ ] 01-02-PLAN.md — Cow data layer: vendor 50 upstream .cow files + NOTICE + SOURCE.md + embed.go (//go:embed + ListCows)
+- [ ] 01-03-PLAN.md — Rendering engine: cowfile parser (dynamic terminator + backslash unescape) + balloon (single/multi-line) + renderer (variable substitution)
+- [ ] 01-04-PLAN.md — Wire-up: gopher.cow (user-pick gate) + main.go calls cowsay.Render + golden tests (gopher + 4 pitfall cows + skipped CJK)
 
 ### Phase 2: Input and Cow Selection
 **Goal**: User can pipe messages via stdin, select any embedded animal with `-f`, list all animals with `-l`, pick a random one with `--random`, and receive a clear error for unknown cows

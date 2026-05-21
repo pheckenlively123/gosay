@@ -1,0 +1,47 @@
+# NOTICE — gosay vendored cow files
+
+## Upstream Attribution
+
+The `.cow` files in this directory are vendored from:
+
+  https://github.com/cowsay-org/cowsay  (tag v3.8.4)
+
+Copyright holders:
+  - Tony Monroe (1999–2002) — original cowsay author
+  - Andrew Janke (2016–2024) — cowsay-org maintainer and GPLv3+ relicensor
+
+These files are distributed under the GNU General Public License v1 or later,
+OR the Artistic License 1.0 (Perl's traditional dual-licensing model), at the
+recipient's choice.  The project-level license (covering tooling and build
+infrastructure) was updated to GPLv3 or later by Andrew Janke in 2016.  Older
+cow artwork retains the broader dual-license grant.
+
+## Per-File License Variances
+
+The following files differ from the default dual-license model:
+
+| File            | License    | Notes                                      |
+|-----------------|------------|--------------------------------------------|
+| apt.cow         | GPL only   | No Artistic License fallback               |
+| gnu.cow         | WTFPL-2    | What The Fuck Public License 2.0           |
+| suse.cow        | WTFPL-2    | What The Fuck Public License 2.0           |
+| kangaroo.cow    | GPL-2.0+   | Narrower than default; GPL v2 or later     |
+
+WTFPL-2 is a permissive public-domain-equivalent license and is compatible with
+all downstream uses.
+
+## daemon.cow Provenance
+
+`daemon.cow` depicts the BSD Daemon, a work whose copyright is held by
+Marshall Kirk McKusick.  Use requires permission from the copyright holder
+(see https://www.freebsd.org/copyright/daemon/).  This file was removed from
+the Fedora Linux cowsay RPM in January 2016 for this reason.  gosay includes
+it as a historical artifact of the upstream cowsay distribution.  Users in
+contexts requiring strict license compliance should delete this file before
+distributing gosay or any binary that embeds it.
+
+## gopher.cow
+
+`gopher.cow` is an original work authored for this project and is not vendored
+from the upstream cowsay set.  It is copyright the gosay authors and distributed
+under the project LICENSE.  See project LICENSE for details.

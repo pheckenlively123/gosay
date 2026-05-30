@@ -11,28 +11,34 @@ func TestBuildBalloon(t *testing.T) {
 		expected string
 	}{
 		{
-			name:  "single_hello",
-			input: "hello",
+			name:  "empty_message",
+			input: "",
+			// Matches upstream cowsay: an empty message renders a tiny empty balloon.
+			expected: " __ \n<  >\n -- \n",
+		},
+		{
+			name:     "single_hello",
+			input:    "hello",
 			expected: " _______ \n< hello >\n ------- \n",
 		},
 		{
-			name:  "single_short",
-			input: "hi",
+			name:     "single_short",
+			input:    "hi",
 			expected: " ____ \n< hi >\n ---- \n",
 		},
 		{
-			name:  "single_one_char",
-			input: "a",
+			name:     "single_one_char",
+			input:    "a",
 			expected: " ___ \n< a >\n --- \n",
 		},
 		{
-			name:  "two_line_equal",
-			input: "line1\nline2",
+			name:     "two_line_equal",
+			input:    "line1\nline2",
 			expected: " _______ \n/ line1 \\\n\\ line2 /\n ------- \n",
 		},
 		{
-			name:  "three_line",
-			input: "a\nb\nc",
+			name:     "three_line",
+			input:    "a\nb\nc",
 			expected: " ___ \n/ a \\\n| b |\n\\ c /\n --- \n",
 		},
 		{

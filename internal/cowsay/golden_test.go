@@ -55,7 +55,9 @@ func TestGolden_DragonAndCowSayHello(t *testing.T) {
 //
 // Upstream Perl cowsay's chop() manipulation produces three-character eyes by
 // appending the chopped character twice to the two-character $eyes value:
-//   $extra = chop($eyes); $eyes .= ($extra x 2);
+//
+//	$extra = chop($eyes); $eyes .= ($extra x 2);
+//
 // gosay's strings.NewReplacer substitutes the bare two-character $eyes value,
 // yielding two eyes rather than three. This is documented in RESEARCH section B-Q6
 // and is not a bug — Phase 3 may address it via a pre-processing pass, but for

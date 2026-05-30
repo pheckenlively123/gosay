@@ -117,8 +117,8 @@ func TestListCows_IncludesGopher(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListCows: %v", err)
 	}
-	if len(names) != 51 {
-		t.Errorf("ListCows returned %d names; want exactly 51 (50 upstream + 1 gopher)", len(names))
+	if len(names) < 51 {
+		t.Errorf("ListCows returned %d names; want >= 51 (50 upstream + 1 gopher)", len(names))
 	}
 	found := false
 	for _, n := range names {

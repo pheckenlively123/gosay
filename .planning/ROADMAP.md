@@ -70,7 +70,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 02-01-PLAN.md — ErrUnknownCow sentinel: cowfile.go wraps fs.ErrNotExist + sentinel test (clean-error foundation for COW-05)
+- [x] 02-01-PLAN.md — ErrUnknownCow sentinel: cowfile.go wraps fs.ErrNotExist + sentinel test (clean-error foundation for COW-05)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -119,6 +119,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. First Runnable | 4/4 | Complete   | 2026-05-21 |
-| 2. Input and Cow Selection | 0/3 | Not started | - |
+| 2. Input and Cow Selection | 1/3 | In Progress|  |
 | 3. Full Flag Surface | 0/TBD | Not started | - |
 | 4. Release Pipeline | 0/TBD | Not started | - |

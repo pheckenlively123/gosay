@@ -66,7 +66,19 @@ Plans:
   4. `gosay --random "hello"` prints some animal saying hello (animal varies across invocations)
   5. `gosay -f nosuchcow "hello"` exits non-zero with a human-readable error message; empty input produces a valid empty bubble with no panic
 
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+**Wave 1**
+
+- [ ] 02-01-PLAN.md — ErrUnknownCow sentinel: cowfile.go wraps fs.ErrNotExist + sentinel test (clean-error foundation for COW-05)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-02-PLAN.md — Core input slice: main.go → flag parsing + TTY-gated stdin + args-win precedence + empty bubble + `-f` selection + clean unknown-cow error (INPUT-02/03/04, COW-02/05)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 02-03-PLAN.md — Listing + random: `-l` columnar output + `--random` (full 51-cow pool) + mutual-exclusion guards (COW-03/04)
 
 ### Phase 3: Full Flag Surface
 
@@ -107,6 +119,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. First Runnable | 4/4 | Complete   | 2026-05-21 |
-| 2. Input and Cow Selection | 0/TBD | Not started | - |
+| 2. Input and Cow Selection | 0/3 | Not started | - |
 | 3. Full Flag Surface | 0/TBD | Not started | - |
 | 4. Release Pipeline | 0/TBD | Not started | - |

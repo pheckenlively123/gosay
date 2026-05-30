@@ -1,0 +1,14 @@
+##
+## Synthetic fixture for testing dynamic heredoc terminator capture.
+## Uses END as the heredoc terminator instead of EOC to verify the parser
+## discovers the terminator name from the opening line dynamically.
+##
+$the_cow = <<END;
+    $thoughts  ,_---~~~~~----._
+  _,,_,*^____      _____``*g*\\",
+ / __/ /'     ^.  /      \ ^@q   f
+[  @f | @))    |  | @))   l  0 _/
+ \\`/   \\~____ / __ \_____/    \
+  |        $eyes        |
+  |         $tongue          |
+END

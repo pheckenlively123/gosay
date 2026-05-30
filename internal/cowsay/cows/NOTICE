@@ -1,0 +1,46 @@
+# NOTICE — gosay vendored cow files
+
+## Upstream Attribution
+
+The `.cow` files in this directory are vendored from:
+
+  https://github.com/cowsay-org/cowsay  (tag v3.8.4)
+
+Copyright holders:
+  - Tony Monroe (1999–2002) — original cowsay author
+  - Andrew Janke (2016–2024) — cowsay-org maintainer and GPLv3+ relicensor
+
+These files are distributed under the GNU General Public License v1 or later,
+OR the Artistic License 1.0 (Perl's traditional dual-licensing model), at the
+recipient's choice.  The project-level license (covering tooling and build
+infrastructure) was updated to GPLv3 or later by Andrew Janke in 2016.  Older
+cow artwork retains the broader dual-license grant.
+
+## Per-File License Variances
+
+None of the `.cow` files embedded in this directory differ from the default
+dual-license model described above, with the single exception of `daemon.cow`,
+whose provenance is documented separately below.
+
+(Some upstream cowsay files documented in upstream `Licensing.md` as carrying
+narrower or alternative licenses — such as `apt.cow`, `gnu.cow`, `suse.cow`, and
+`kangaroo.cow` — are **not** part of gosay's vendored set and are therefore not
+distributed here.)
+
+## daemon.cow Provenance
+
+`daemon.cow` depicts the BSD Daemon, a work whose copyright is held by
+Marshall Kirk McKusick.  Use requires permission from the copyright holder
+(see https://www.freebsd.org/copyright/daemon/).  This file was removed from
+the Fedora Linux cowsay RPM in January 2016 for this reason.  gosay includes
+it as a historical artifact of the upstream cowsay distribution.  Users in
+contexts requiring strict license compliance should delete this file before
+distributing gosay or any binary that embeds it.
+
+## gopher.cow
+
+`gopher.cow` is hand-authored original ASCII art created for the gosay project
+by the project authors.  The Go gopher mascot was designed by Renee French and
+is licensed by Google under CC BY 3.0; this ASCII rendering does not include any
+of Google's gopher artwork and is original work derived from the visual concept.
+It is distributed under the gosay project LICENSE (root of repo).

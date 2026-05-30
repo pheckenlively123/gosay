@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"math/rand"
 	"os"
 	"strings"
 
@@ -20,6 +21,32 @@ func isTTY(f *os.File) bool {
 	return fi.Mode()&os.ModeCharDevice != 0
 }
 
+// formatCowList formats a sorted slice of cow names into the canonical -l output:
+// a "Cow files:" header followed by names joined with a single space, wrapped at
+// approximately 76 characters per line (matching the upstream cowsay column shape).
+func formatCowList(names []string) string {
+	const wrapWidth = 76
+	var sb strings.Builder
+	sb.WriteString("Cow files:\n")
+	line := ""
+	for _, name := range names {
+		if line == "" {
+			line = name
+		} else if len(line)+1+len(name) > wrapWidth {
+			sb.WriteString(line)
+			sb.WriteByte('\n')
+			line = name
+		} else {
+			line += " " + name
+		}
+	}
+	if line != "" {
+		sb.WriteString(line)
+		sb.WriteByte('\n')
+	}
+	return sb.String()
+}
+
 // run assembles the message from args or stdin, renders it, and writes the result.
 // It returns the process exit code so the logic is testable without os.Exit.
 // args is os.Args[1:] (the program arguments, excluding the binary name).
@@ -28,14 +55,60 @@ func run(args []string, stdout, stderr io.Writer) int {
 	fs.SetOutput(stderr)
 
 	var cowName string
+	var listFlag bool
+	var randomFlag bool
 	fs.StringVar(&cowName, "f", "gopher", "cow `name` to use")
+	fs.BoolVar(&listFlag, "l", false, "list available cows")
+	fs.BoolVar(&randomFlag, "random", false, "pick a random cow")
 
 	fs.Usage = func() {
-		fmt.Fprintln(stderr, "usage: gosay [-f name] [message...]")
+		fmt.Fprintln(stderr, "usage: gosay [-f name] [-l] [--random] [message...]")
 	}
 
 	if err := fs.Parse(args); err != nil {
 		return 1
+	}
+
+	// Detect whether -f was explicitly set (vs. defaulting to "gopher").
+	fExplicit := false
+	fs.Visit(func(f *flag.Flag) {
+		if f.Name == "f" {
+			fExplicit = true
+		}
+	})
+
+	// D-06: -f + --random together is a usage error.
+	if randomFlag && fExplicit {
+		fmt.Fprintln(stderr, "gosay: cannot combine -f and --random")
+		return 1
+	}
+
+	// D-09: -l cannot be combined with a message or animal selection.
+	if listFlag && (len(fs.Args()) > 0 || randomFlag || fExplicit) {
+		fmt.Fprintln(stderr, "gosay: -l cannot be combined with a message or animal selection")
+		return 1
+	}
+
+	// -l branch: print the columnar cow listing and exit.
+	if listFlag {
+		names, err := cowsay.ListCows()
+		if err != nil {
+			fmt.Fprintln(stderr, err)
+			return 1
+		}
+		fmt.Fprint(stdout, formatCowList(names))
+		return 0
+	}
+
+	// Determine the animal: --random picks from the full ListCows() pool.
+	animal := cowName
+	if randomFlag {
+		names, err := cowsay.ListCows()
+		if err != nil {
+			fmt.Fprintln(stderr, err)
+			return 1
+		}
+		animal = names[rand.Intn(len(names))]
 	}
 
 	// Resolve the message: positional args win over stdin.
@@ -47,7 +120,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 		// No positional args — check whether stdin is piped or a TTY.
 		if isTTY(os.Stdin) {
 			// Interactive terminal with no args: print usage and exit.
-			fmt.Fprintln(stderr, "usage: gosay [-f name] [message...]")
+			fmt.Fprintln(stderr, "usage: gosay [-f name] [-l] [--random] [message...]")
 			return 1
 		}
 		// Stdin is piped: read it.
@@ -60,10 +133,10 @@ func run(args []string, stdout, stderr io.Writer) int {
 		message = strings.TrimSuffix(string(data), "\n")
 	}
 
-	out, err := cowsay.Render(cowName, message, cowsay.RenderOpts{})
+	out, err := cowsay.Render(animal, message, cowsay.RenderOpts{})
 	if err != nil {
 		if errors.Is(err, cowsay.ErrUnknownCow) {
-			fmt.Fprintf(stderr, "gosay: unknown cowfile %q\n", cowName)
+			fmt.Fprintf(stderr, "gosay: unknown cowfile %q\n", animal)
 			return 1
 		}
 		fmt.Fprintln(stderr, err)

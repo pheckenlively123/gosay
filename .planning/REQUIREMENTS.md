@@ -10,17 +10,17 @@ Requirements for initial release. Each maps to a roadmap phase.
 ### Input
 
 - [ ] **INPUT-01**: User can pass a message as positional arguments (`gosay hello world`)
-- [ ] **INPUT-02**: User can pipe a message via stdin (`echo hello | gosay`)
-- [ ] **INPUT-03**: When both stdin and positional args are present, positional args win (matches upstream cowsay behavior)
-- [ ] **INPUT-04**: Empty input produces a valid empty bubble (no panic, no garbled output)
+- [x] **INPUT-02**: User can pipe a message via stdin (`echo hello | gosay`)
+- [x] **INPUT-03**: When both stdin and positional args are present, positional args win (matches upstream cowsay behavior)
+- [x] **INPUT-04**: Empty input produces a valid empty bubble (no panic, no garbled output)
 
 ### Cow Selection
 
 - [ ] **COW-01**: Default animal is a gopher (hand-authored from the Go mascot, embedded as `gopher.cow`)
-- [ ] **COW-02**: `-f <name>` selects a specific animal from the embedded set
+- [x] **COW-02**: `-f <name>` selects a specific animal from the embedded set
 - [ ] **COW-03**: `-l` lists every embedded animal name (upstream cowsay columnar format — `Cow files:` header + names in wrapped columns)
 - [ ] **COW-04**: `--random` picks a random animal each invocation
-- [ ] **COW-05**: Unknown `-f <name>` exits non-zero with a clear error message
+- [x] **COW-05**: Unknown `-f <name>` exits non-zero with a clear error message
 
 ### Cow Files
 
@@ -82,14 +82,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | INPUT-01 | Phase 1 | Pending |
-| INPUT-02 | Phase 2 | Pending |
-| INPUT-03 | Phase 2 | Pending |
-| INPUT-04 | Phase 2 | Pending |
+| INPUT-02 | Phase 2 | Complete |
+| INPUT-03 | Phase 2 | Complete |
+| INPUT-04 | Phase 2 | Complete |
 | COW-01 | Phase 1 | Pending |
-| COW-02 | Phase 2 | Pending |
+| COW-02 | Phase 2 | Complete |
 | COW-03 | Phase 2 | Pending |
 | COW-04 | Phase 2 | Pending |
-| COW-05 | Phase 2 | Pending |
+| COW-05 | Phase 2 | Complete |
 | COWS-01 | Phase 1 | Pending |
 | COWS-02 | Phase 1 | Pending |
 | COWS-03 | Phase 1 | Pending |
@@ -111,6 +111,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HELP-01 | Phase 3 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 28 total (4 INPUT + 5 COW + 5 COWS + 8 RENDER + 5 DIST + 1 HELP)
 - Mapped to phases: 28
 - Unmapped: 0

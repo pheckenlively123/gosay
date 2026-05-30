@@ -5,9 +5,15 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io/fs"
 	"regexp"
 	"strings"
 )
+
+// ErrUnknownCow is returned by LoadCow when the named cow does not exist in
+// the embedded set. Callers use errors.Is(err, cowsay.ErrUnknownCow) to
+// distinguish a missing cow from other (I/O or parse) errors.
+var ErrUnknownCow = errors.New("unknown cowfile")
 
 // heredocOpen matches the heredoc opener line, capturing the terminator token.
 // It is anchored to the `$the_cow = <<TOKEN` assignment so that an incidental
@@ -86,6 +92,9 @@ func parseCowBody(data []byte) (string, error) {
 func LoadCow(name string) (ParsedCow, error) {
 	data, err := readCowFile(name)
 	if err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			return ParsedCow{}, fmt.Errorf("%w: %s", ErrUnknownCow, name)
+		}
 		return ParsedCow{}, fmt.Errorf("load cow %q: %w", name, err)
 	}
 	body, err := parseCowBody(data)

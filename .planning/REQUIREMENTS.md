@@ -18,8 +18,8 @@ Requirements for initial release. Each maps to a roadmap phase.
 
 - [ ] **COW-01**: Default animal is a gopher (hand-authored from the Go mascot, embedded as `gopher.cow`)
 - [x] **COW-02**: `-f <name>` selects a specific animal from the embedded set
-- [ ] **COW-03**: `-l` lists every embedded animal name (upstream cowsay columnar format — `Cow files:` header + names in wrapped columns)
-- [ ] **COW-04**: `--random` picks a random animal each invocation
+- [x] **COW-03**: `-l` lists every embedded animal name (upstream cowsay columnar format — `Cow files:` header + names in wrapped columns)
+- [x] **COW-04**: `--random` picks a random animal each invocation
 - [x] **COW-05**: Unknown `-f <name>` exits non-zero with a clear error message
 
 ### Cow Files
@@ -87,8 +87,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INPUT-04 | Phase 2 | Complete |
 | COW-01 | Phase 1 | Pending |
 | COW-02 | Phase 2 | Complete |
-| COW-03 | Phase 2 | Pending |
-| COW-04 | Phase 2 | Pending |
+| COW-03 | Phase 2 | Complete |
+| COW-04 | Phase 2 | Complete |
 | COW-05 | Phase 2 | Complete |
 | COWS-01 | Phase 1 | Pending |
 | COWS-02 | Phase 1 | Pending |

@@ -2,6 +2,7 @@ package cowsay
 
 import (
 	"embed"
+	"fmt"
 	"sort"
 	"strings"
 )
@@ -14,7 +15,7 @@ var cowFS embed.FS
 func ListCows() ([]string, error) {
 	entries, err := cowFS.ReadDir("cows")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("listing embedded cows: %w", err)
 	}
 	names := make([]string, 0, len(entries))
 	for _, e := range entries {

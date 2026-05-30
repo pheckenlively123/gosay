@@ -26,12 +26,12 @@ type RenderOpts struct {
 // any empty RenderOpts fields, substitutes both bare ($eyes) and brace (${eyes})
 // forms of each variable in a single strings.NewReplacer pass, and concatenates
 // the balloon (which ends with \n) and the substituted cow body.
-func Render(animal, message string, opts RenderOpts) (string, error) {
-	cow, err := LoadCow(animal)
-	if err != nil {
-		return "", fmt.Errorf("render: %w", err)
-	}
-
+// substituteVars applies cow-variable substitution to body using opts, filling
+// in Phase 1 defaults for any empty fields. It covers both bare ($var) and brace
+// (${var}) forms in a single pass. This is the single source of truth for the
+// substitution set so tests can exercise the production replacer directly rather
+// than duplicating the literal pattern list.
+func substituteVars(body string, opts RenderOpts) string {
 	// Resolve effective values — apply defaults when fields are empty
 	eyes := opts.Eyes
 	if eyes == "" {
@@ -58,12 +58,24 @@ func Render(animal, message string, opts RenderOpts) (string, error) {
 		"$tongue", tongue,
 		"${tongue}", tongue,
 	)
-	substitutedBody := r.Replace(cow.Body)
+	return r.Replace(body)
+}
+
+func Render(animal, message string, opts RenderOpts) (string, error) {
+	cow, err := LoadCow(animal)
+	if err != nil {
+		return "", fmt.Errorf("render: %w", err)
+	}
+
+	substitutedBody := substituteVars(cow.Body, opts)
 
 	// Build the speech balloon and concatenate with the cow body.
 	// buildBalloon returns a string that already ends with \n (the bottom border).
-	// The cow body may or may not have a trailing newline depending on the upstream file;
-	// we do not add an extra newline — Plan 01-04 goldens verify the exact byte output.
+	// The cow body may or may not have a trailing newline depending on whether the
+	// upstream .cow file placed a newline after its last art line before the heredoc
+	// terminator. To keep output animal-independent (and matching upstream cowsay,
+	// which always terminates with a newline), normalize to exactly one trailing \n.
 	balloon := buildBalloon(message)
-	return balloon + substitutedBody, nil
+	out := balloon + substitutedBody
+	return strings.TrimRight(out, "\n") + "\n", nil
 }

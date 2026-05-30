@@ -66,22 +66,11 @@ func TestRender_CustomTongue(t *testing.T) {
 }
 
 func TestRender_BraceForms(t *testing.T) {
-	// Test that brace forms ${eyes}, ${tongue}, ${thoughts} are substituted
-	// by constructing a synthetic body with brace forms and running the
-	// substitution logic inline (mirrors the NewReplacer used in Render).
-	eyes := "oo"
-	tongue := "  "
-	thoughts := `\`
-	r := strings.NewReplacer(
-		"$thoughts", thoughts,
-		"${thoughts}", thoughts,
-		"$eyes", eyes,
-		"${eyes}", eyes,
-		"$tongue", tongue,
-		"${tongue}", tongue,
-	)
+	// Test that brace forms ${eyes}, ${tongue}, ${thoughts} are substituted.
+	// Drive the assertion through the production substituteVars helper (the same
+	// code path Render uses) so the test cannot drift from the production replacer.
 	syntheticBody := "head ${eyes} ${tongue} ${thoughts} tail"
-	result := r.Replace(syntheticBody)
+	result := substituteVars(syntheticBody, RenderOpts{})
 	if strings.Contains(result, "${eyes}") {
 		t.Errorf("brace form ${eyes} was not substituted: %q", result)
 	}

@@ -10,8 +10,11 @@ import (
 )
 
 // heredocOpen matches the heredoc opener line, capturing the terminator token.
+// It is anchored to the `$the_cow = <<TOKEN` assignment so that an incidental
+// `<<` sequence in a comment or art line before the real opener is not mistaken
+// for the heredoc opener.
 // It handles: <<EOC;  <<"EOC";  <<'EOC';  <<EOC  <<"EOC"  <<'EOC'
-var heredocOpen = regexp.MustCompile(`<<["']?(\w+)["']?;?`)
+var heredocOpen = regexp.MustCompile(`\$the_cow\s*=\s*<<["']?(\w+)["']?;?`)
 
 // cowBodyUnescape resolves Perl backslash escape sequences in heredoc bodies.
 // Must be applied BEFORE variable substitution so that \$eyes is resolved

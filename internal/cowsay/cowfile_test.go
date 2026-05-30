@@ -1,6 +1,7 @@
 package cowsay
 
 import (
+	"errors"
 	"os"
 	"strings"
 	"testing"
@@ -164,5 +165,19 @@ func TestLoadCow_Nonexistent(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "does-not-exist") {
 		t.Errorf("expected error to mention 'does-not-exist', got: %v", err)
+	}
+}
+
+// TestLoadCow_Nonexistent_SentinelError verifies that LoadCow returns an error
+// that satisfies errors.Is(err, ErrUnknownCow) when the named cow does not exist.
+// Callers (e.g. main.go) use this sentinel to produce the user-facing message
+// `gosay: unknown cowfile "<name>"` without leaking the internal embed path.
+func TestLoadCow_Nonexistent_SentinelError(t *testing.T) {
+	_, err := LoadCow("does-not-exist")
+	if err == nil {
+		t.Fatal("expected error for non-existent cow, got nil")
+	}
+	if !errors.Is(err, ErrUnknownCow) {
+		t.Errorf("expected errors.Is(err, ErrUnknownCow) = true, got err: %v", err)
 	}
 }

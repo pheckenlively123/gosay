@@ -110,6 +110,19 @@ func TestGolden_CJK_Skipped(t *testing.T) {
 	g.Assert(t, "cjk_skip", []byte(out))
 }
 
+// TestGolden_GopherSayEmpty verifies D-03: an empty message renders a valid empty
+// bubble (top/bottom borders with a single-space interior line) above the gopher.
+// The balloon builder produces this naturally for the empty string; this golden
+// captures the full output so regressions in blank-message handling are caught.
+func TestGolden_GopherSayEmpty(t *testing.T) {
+	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
+	out, err := Render("gopher", "", RenderOpts{})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	g.Assert(t, "gopher_say_empty", []byte(out))
+}
+
 // TestListCows_IncludesGopher is a regression assertion that gopher.cow actually
 // landed in the embedded cow set after Plan 01-04 added it.
 func TestListCows_IncludesGopher(t *testing.T) {

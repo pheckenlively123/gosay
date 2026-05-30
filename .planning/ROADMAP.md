@@ -14,7 +14,7 @@ gosay ships in four vertical slices. Phase 1 produces a real, runnable binary �
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: First Runnable** - `gosay "hello"` prints a gopher with a speech bubble; parser, balloon, renderer, and CLI wired end-to-end; cows vendored with NOTICE (completed 2026-05-21)
-- [ ] **Phase 2: Input and Cow Selection** - stdin, `-f`, `-l`, `--random`, empty input, error handling
+- [x] **Phase 2: Input and Cow Selection** - stdin, `-f`, `-l`, `--random`, empty input, error handling (completed 2026-05-30)
 - [ ] **Phase 3: Full Flag Surface** - `--think`, `-W`, `-n`, `-e`, `-T`, runewidth, `-h`/`--help`
 - [ ] **Phase 4: Release Pipeline** - GoReleaser, GitHub Actions, `--version`, `go install`
 
@@ -78,7 +78,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 02-03-PLAN.md — Listing + random: `-l` columnar output + `--random` (full 51-cow pool) + mutual-exclusion guards (COW-03/04)
+- [x] 02-03-PLAN.md — Listing + random: `-l` columnar output + `--random` (full 51-cow pool) + mutual-exclusion guards (COW-03/04)
 
 ### Phase 3: Full Flag Surface
 
@@ -119,6 +119,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. First Runnable | 4/4 | Complete   | 2026-05-21 |
-| 2. Input and Cow Selection | 2/3 | In Progress|  |
+| 2. Input and Cow Selection | 3/3 | Complete   | 2026-05-30 |
 | 3. Full Flag Surface | 0/TBD | Not started | - |
 | 4. Release Pipeline | 0/TBD | Not started | - |

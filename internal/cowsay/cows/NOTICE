@@ -18,17 +18,14 @@ cow artwork retains the broader dual-license grant.
 
 ## Per-File License Variances
 
-The following files differ from the default dual-license model:
+None of the `.cow` files embedded in this directory differ from the default
+dual-license model described above, with the single exception of `daemon.cow`,
+whose provenance is documented separately below.
 
-| File            | License    | Notes                                      |
-|-----------------|------------|--------------------------------------------|
-| apt.cow         | GPL only   | No Artistic License fallback               |
-| gnu.cow         | WTFPL-2    | What The Fuck Public License 2.0           |
-| suse.cow        | WTFPL-2    | What The Fuck Public License 2.0           |
-| kangaroo.cow    | GPL-2.0+   | Narrower than default; GPL v2 or later     |
-
-WTFPL-2 is a permissive public-domain-equivalent license and is compatible with
-all downstream uses.
+(Some upstream cowsay files documented in upstream `Licensing.md` as carrying
+narrower or alternative licenses — such as `apt.cow`, `gnu.cow`, `suse.cow`, and
+`kangaroo.cow` — are **not** part of gosay's vendored set and are therefore not
+distributed here.)
 
 ## daemon.cow Provenance
 

@@ -18,7 +18,7 @@ Requirements for initial release. Each maps to a roadmap phase.
 
 - [ ] **COW-01**: Default animal is a gopher (hand-authored from the Go mascot, embedded as `gopher.cow`)
 - [ ] **COW-02**: `-f <name>` selects a specific animal from the embedded set
-- [ ] **COW-03**: `-l` lists every embedded animal name
+- [ ] **COW-03**: `-l` lists every embedded animal name (upstream cowsay columnar format — `Cow files:` header + names in wrapped columns)
 - [ ] **COW-04**: `--random` picks a random animal each invocation
 - [ ] **COW-05**: Unknown `-f <name>` exits non-zero with a clear error message
 

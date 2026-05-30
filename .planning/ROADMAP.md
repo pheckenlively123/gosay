@@ -62,7 +62,7 @@ Plans:
 
   1. `echo "hello" | gosay` prints a gopher saying hello (stdin path works)
   2. `gosay -f tux "hello"` prints tux saying hello (any embedded animal selectable by name)
-  3. `gosay -l` lists every embedded animal name, one per line
+  3. `gosay -l` lists every embedded animal name in upstream cowsay columnar format (a `Cow files:` header followed by names wrapped into space-separated columns)
   4. `gosay --random "hello"` prints some animal saying hello (animal varies across invocations)
   5. `gosay -f nosuchcow "hello"` exits non-zero with a human-readable error message; empty input produces a valid empty bubble with no panic
 

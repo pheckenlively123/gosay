@@ -115,3 +115,80 @@ func TestRun_EmptyMessage_Renders(t *testing.T) {
 		t.Error("expected non-empty stdout for empty message arg")
 	}
 }
+
+// TestRun_ListFlag_AloneExits0 verifies that -l alone prints the Cow files: header,
+// includes gopher (plain, no default marker), and exits 0. COW-03 / D-07 / D-08.
+func TestRun_ListFlag_AloneExits0(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"-l"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for -l, got %d (stderr: %q)", code, stderr.String())
+	}
+	out := stdout.String()
+	if !strings.HasPrefix(out, "Cow files:") {
+		t.Errorf("expected stdout to start with 'Cow files:', got: %q", out[:min(len(out), 30)])
+	}
+	if !strings.Contains(out, "gopher") {
+		t.Errorf("expected gopher in -l listing, got:\n%s", out)
+	}
+	// D-08: gopher must appear plain with no (default) marker.
+	if strings.Contains(out, "default)") {
+		t.Errorf("expected no (default) marker in -l listing, got:\n%s", out)
+	}
+	if stderr.Len() != 0 {
+		t.Errorf("expected no stderr for -l, got: %q", stderr.String())
+	}
+}
+
+// TestRun_ListFlag_WithMessage_IsError verifies that -l combined with a positional
+// message exits 1 (usage error). D-09.
+func TestRun_ListFlag_WithMessage_IsError(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"-l", "hello"}, &stdout, &stderr)
+	if code != 1 {
+		t.Errorf("expected exit code 1 for -l with message, got %d", code)
+	}
+	if stdout.Len() != 0 {
+		t.Errorf("expected no stdout on -l conflict error, got: %q", stdout.String())
+	}
+}
+
+// TestRun_ListFlag_WithRandom_IsError verifies that -l combined with --random exits 1.
+// D-09.
+func TestRun_ListFlag_WithRandom_IsError(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"-l", "--random"}, &stdout, &stderr)
+	if code != 1 {
+		t.Errorf("expected exit code 1 for -l with --random, got %d", code)
+	}
+}
+
+// TestRun_FlagConflict_FAndRandom verifies that combining -f and --random exits 1
+// with a 'cannot combine' message. D-06.
+func TestRun_FlagConflict_FAndRandom(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"-f", "tux", "--random", "hi"}, &stdout, &stderr)
+	if code != 1 {
+		t.Errorf("expected exit code 1 for -f + --random, got %d", code)
+	}
+	if !strings.Contains(stderr.String(), "cannot combine") {
+		t.Errorf("expected 'cannot combine' in stderr, got: %q", stderr.String())
+	}
+	if stdout.Len() != 0 {
+		t.Errorf("expected no stdout on conflict error, got: %q", stdout.String())
+	}
+}
+
+// TestRun_Random_ReturnsMember verifies that --random with a message exits 0 and
+// produces non-empty output. D-04 / D-05. The specific animal is not checked
+// (non-deterministic by design).
+func TestRun_Random_ReturnsMember(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--random", "hello"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for --random hello, got %d (stderr: %q)", code, stderr.String())
+	}
+	if stdout.Len() == 0 {
+		t.Error("expected non-empty stdout for --random hello")
+	}
+}

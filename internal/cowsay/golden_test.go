@@ -94,20 +94,17 @@ func TestGolden_NonEOCSayHello(t *testing.T) {
 	g.Assert(t, "non_eoc_say_hello", []byte(out))
 }
 
-// TestGolden_CJK_Skipped documents the Phase 1 CJK display-width gap.
-// gosay's Phase 1 displayWidth uses utf8.RuneCountInString which under-pads the
-// balloon for CJK input (each CJK rune occupies 2 terminal columns but counts as 1).
-// This test exists to document the gap and will be enabled in Phase 3 / RENDER-06
-// when displayWidth is swapped to runewidth.StringWidth.
-func TestGolden_CJK_Skipped(t *testing.T) {
-	t.Skip("CJK display width requires runewidth (Phase 3 / RENDER-06); gosay's Phase 1 displayWidth uses utf8.RuneCountInString which under-pads the balloon for CJK input — this test exists to document the gap, will be enabled in Phase 3")
+// TestGolden_GopherSayCJK verifies that the CJK bubble aligns correctly after the
+// Phase 3 / RENDER-06 displayWidth swap to runewidth.StringWidth.
+// 漢字テスト = 5 CJK chars, each 2 display columns wide = 10 total display columns.
+// The right border must align with the top/bottom borders (width 12 = 10 + 2).
+func TestGolden_GopherSayCJK(t *testing.T) {
 	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
-	// 漢字テスト = 漢字テスト
 	out, err := Render("gopher", "漢字テスト", RenderOpts{})
 	if err != nil {
 		t.Fatalf("Render: %v", err)
 	}
-	g.Assert(t, "cjk_skip", []byte(out))
+	g.Assert(t, "cjk_aligned_gopher", []byte(out))
 }
 
 // TestGolden_GopherSayEmpty verifies D-03: an empty message renders a valid empty

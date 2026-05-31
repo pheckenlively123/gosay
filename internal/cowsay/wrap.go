@@ -3,6 +3,8 @@ package cowsay
 import (
 	"strings"
 	"unicode/utf8"
+
+	"github.com/mattn/go-runewidth"
 )
 
 // wrapMessage preserves existing newlines then word-wraps each resulting line.
@@ -30,23 +32,29 @@ func wrapWords(line string, width int) []string {
 	var result []string
 	var current strings.Builder
 	currentW := 0
+	// emitWord starts a fresh line with word (current must be empty here). A word
+	// that fits is written whole; an over-width word is hard-broken, with all but
+	// the final chunk flushed to result and the remainder left in current.
+	emitWord := func(word string, wordW int) {
+		if wordW <= width {
+			current.WriteString(word)
+			currentW = wordW
+			return
+		}
+		chunks := hardBreak(word, width)
+		for i, chunk := range chunks {
+			if i < len(chunks)-1 {
+				result = append(result, chunk)
+			} else {
+				current.WriteString(chunk)
+				currentW = displayWidth(chunk)
+			}
+		}
+	}
 	for _, word := range words {
 		wordW := displayWidth(word)
 		if currentW == 0 {
-			if wordW <= width {
-				current.WriteString(word)
-				currentW = wordW
-			} else {
-				chunks := hardBreak(word, width)
-				for i, chunk := range chunks {
-					if i < len(chunks)-1 {
-						result = append(result, chunk)
-					} else {
-						current.WriteString(chunk)
-						currentW = displayWidth(chunk)
-					}
-				}
-			}
+			emitWord(word, wordW)
 		} else if currentW+1+wordW <= width {
 			current.WriteByte(' ')
 			current.WriteString(word)
@@ -55,20 +63,7 @@ func wrapWords(line string, width int) []string {
 			result = append(result, current.String())
 			current.Reset()
 			currentW = 0
-			if wordW <= width {
-				current.WriteString(word)
-				currentW = wordW
-			} else {
-				chunks := hardBreak(word, width)
-				for i, chunk := range chunks {
-					if i < len(chunks)-1 {
-						result = append(result, chunk)
-					} else {
-						current.WriteString(chunk)
-						currentW = displayWidth(chunk)
-					}
-				}
-			}
+			emitWord(word, wordW)
 		}
 	}
 	if current.Len() > 0 {
@@ -81,8 +76,10 @@ func wrapWords(line string, width int) []string {
 // Rune boundaries are respected — never splits inside a multi-byte rune.
 // Advances by utf8.DecodeRuneInString byte size, never by display width,
 // ensuring valid UTF-8 output on every chunk (T-03-05 mitigation).
-// A single rune whose display width exceeds width is skipped (safety break)
-// to prevent an infinite loop when width is smaller than one rune (T-03-04 mitigation).
+// A single rune whose display width exceeds width is emitted as its own
+// over-width chunk and advanced past (T-03-04 mitigation). This guarantees no
+// data loss while still preventing an infinite loop when width is smaller than
+// one rune (e.g. `-W 1` with a 2-column CJK glyph): output is degraded but complete.
 func hardBreak(s string, width int) []string {
 	var result []string
 	for len(s) > 0 {
@@ -91,7 +88,7 @@ func hardBreak(s string, width int) []string {
 		remaining := s
 		for len(remaining) > 0 {
 			r, size := utf8.DecodeRuneInString(remaining)
-			rw := displayWidth(string(r))
+			rw := runewidth.RuneWidth(r)
 			if chunkW+rw > width {
 				break
 			}
@@ -100,9 +97,14 @@ func hardBreak(s string, width int) []string {
 			remaining = remaining[size:]
 		}
 		if chunk.Len() == 0 {
-			break // safety: single rune wider than width — skip to prevent infinite loop
+			// A single leading rune is wider than width. Emit it alone as an
+			// over-width chunk and advance, rather than discarding the remainder.
+			r, size := utf8.DecodeRuneInString(remaining)
+			result = append(result, string(r))
+			remaining = remaining[size:]
+		} else {
+			result = append(result, chunk.String())
 		}
-		result = append(result, chunk.String())
 		s = s[len(s)-len(remaining):]
 	}
 	return result

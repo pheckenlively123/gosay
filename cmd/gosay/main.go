@@ -55,7 +55,7 @@ Flags:
   -e <eyes>     Set eye characters (default "oo")
   -f <name>     Select animal from embedded set (default "gopher")
   -l            List available animals
-  -n            Disable word wrapping (preserve all input whitespace)
+  -n            Disable word wrapping (preserve all input whitespace; overrides -W)
   -T <tongue>   Set tongue characters (default "  ")
   -W <cols>     Wrap message at this many display columns (default 40)
   --random      Pick a random animal
@@ -81,6 +81,10 @@ func run(args []string, stdout, stderr io.Writer) int {
 	var think bool
 	var eyes string
 	var tongue string
+	// NOTE: -e/-T/-W register empty-string/zero defaults as "not set" sentinels;
+	// the real user-facing defaults ("oo", "  ", 40 cols) are resolved downstream
+	// in substituteVars/Render. The help-text strings above describe those effective
+	// defaults, which is why they intentionally differ from the values registered here.
 	fs.StringVar(&cowName, "f", "gopher", "cow `name` to use")
 	fs.BoolVar(&listFlag, "l", false, "list available cows")
 	fs.BoolVar(&randomFlag, "random", false, "pick a random cow")
@@ -104,13 +108,25 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 
-	// Detect whether -f was explicitly set (vs. defaulting to "gopher").
+	// Detect whether -f / -W were explicitly set (vs. their zero/default values).
 	fExplicit := false
+	wExplicit := false
 	fs.Visit(func(f *flag.Flag) {
-		if f.Name == "f" {
+		switch f.Name {
+		case "f":
 			fExplicit = true
+		case "W":
+			wExplicit = true
 		}
 	})
+
+	// Reject an explicitly non-positive -W. An unset -W (0) is the "use default 40"
+	// sentinel resolved in Render; but a user who explicitly asks for -W 0 or a
+	// negative width gets a usage error rather than a silent fallback to 40.
+	if wExplicit && wrapWidth < 1 {
+		fmt.Fprintln(stderr, "gosay: -W must be a positive number of columns")
+		return 1
+	}
 
 	// D-06: -f + --random together is a usage error.
 	if randomFlag && fExplicit {

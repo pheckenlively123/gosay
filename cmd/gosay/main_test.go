@@ -285,17 +285,17 @@ func TestRun_EyesFlag_Custom(t *testing.T) {
 	}
 }
 
-// TestRun_TongueFlag_Custom verifies -T passes tongue characters (RENDER-08).
-// The gopher cow body may not expose $tongue in its art, so we only assert
-// non-empty output and exit 0.
+// TestRun_TongueFlag_Custom verifies -T substitutes tongue characters (RENDER-08).
+// Uses default.cow (whose art exposes $tongue) so the assertion is meaningful:
+// the custom tongue must actually appear in the rendered output.
 func TestRun_TongueFlag_Custom(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	code := run([]string{"-T", "U ", "hello"}, &stdout, &stderr)
+	code := run([]string{"-f", "default", "-T", "UU", "hello"}, &stdout, &stderr)
 	if code != 0 {
-		t.Errorf("expected exit code 0 for -T U , got %d", code)
+		t.Errorf("expected exit code 0 for -T UU, got %d (stderr: %q)", code, stderr.String())
 	}
-	if stdout.Len() == 0 {
-		t.Error("expected non-empty output for -T U , got empty")
+	if !strings.Contains(stdout.String(), "UU") {
+		t.Errorf("expected custom tongue \"UU\" in output, got: %q", stdout.String())
 	}
 }
 

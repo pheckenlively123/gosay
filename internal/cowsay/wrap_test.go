@@ -1,6 +1,7 @@
 package cowsay
 
 import (
+	"strings"
 	"testing"
 	"unicode/utf8"
 )
@@ -87,5 +88,34 @@ func TestHardBreak_RuneSafe(t *testing.T) {
 		if w > 2 {
 			t.Errorf("chunk[%d] = %q has display width %d, want <= 2", i, chunk, w)
 		}
+	}
+}
+
+// TestHardBreak_WideRuneNarrowWidth verifies that a glyph wider than the wrap
+// width is preserved (emitted as its own over-width chunk) rather than silently
+// dropped — guarding against the data-loss regression from the old safety break.
+func TestHardBreak_WideRuneNarrowWidth(t *testing.T) {
+	const input = "漢字漢" // three 2-column CJK glyphs
+	chunks := hardBreak(input, 1)
+	if len(chunks) != 3 {
+		t.Fatalf("hardBreak(%q, 1) = %d chunks, want 3 (no data loss)", input, len(chunks))
+	}
+	if got := strings.Join(chunks, ""); got != input {
+		t.Errorf("hardBreak lost data: joined chunks = %q, want %q", got, input)
+	}
+	for i, chunk := range chunks {
+		if !utf8.ValidString(chunk) {
+			t.Errorf("chunk[%d] = %q is not valid UTF-8", i, chunk)
+		}
+	}
+}
+
+// TestWrapWords_WideRuneNarrowWidth verifies the full wrap path also preserves
+// all input when width is smaller than a single glyph.
+func TestWrapWords_WideRuneNarrowWidth(t *testing.T) {
+	const input = "漢字"
+	lines := wrapWords(input, 1)
+	if got := strings.Join(lines, ""); got != input {
+		t.Errorf("wrapWords lost data: joined lines = %q, want %q", got, input)
 	}
 }

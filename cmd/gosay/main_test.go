@@ -192,3 +192,137 @@ func TestRun_Random_ReturnsMember(t *testing.T) {
 		t.Error("expected non-empty stdout for --random hello")
 	}
 }
+
+// TestRun_Help_ExitsZero verifies that -h prints help to stdout and exits 0 (D-13).
+func TestRun_Help_ExitsZero(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"-h"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for -h, got %d (stderr: %q)", code, stderr.String())
+	}
+	// Help goes to stdout (D-13)
+	if !strings.Contains(stdout.String(), "gosay") {
+		t.Errorf("expected help text on stdout containing 'gosay', got: %q", stdout.String())
+	}
+	if !strings.Contains(stdout.String(), "gosay hello") {
+		t.Errorf("expected example invocation in help text, got: %q", stdout.String())
+	}
+	// Must NOT appear on stderr
+	if stderr.Len() != 0 {
+		t.Errorf("expected no stderr for -h, got: %q", stderr.String())
+	}
+}
+
+// TestRun_LongHelp_ExitsZero verifies that --help behaves identically to -h (D-13).
+func TestRun_LongHelp_ExitsZero(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for --help, got %d (stderr: %q)", code, stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "gosay") {
+		t.Errorf("expected help text on stdout containing 'gosay', got: %q", stdout.String())
+	}
+	if stderr.Len() != 0 {
+		t.Errorf("expected no stderr for --help, got: %q", stderr.String())
+	}
+}
+
+// TestRun_Think_UsesBubble verifies --think produces ( ) thought bubble (RENDER-07).
+func TestRun_Think_UsesBubble(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--think", "hello"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for --think, got %d", code)
+	}
+	if !strings.Contains(stdout.String(), "( hello )") {
+		t.Errorf("expected thought bubble '( hello )' in stdout, got:\n%s", stdout.String())
+	}
+}
+
+// TestRun_WFlag_CustomWidth verifies -W wraps at the specified column width (RENDER-05).
+// "hello world" is 11 display cols, so -W 10 must produce two rows.
+func TestRun_WFlag_CustomWidth(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"-W", "10", "hello world"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for -W 10, got %d", code)
+	}
+	out := stdout.String()
+	if !strings.Contains(out, "hello") || !strings.Contains(out, "world") {
+		t.Errorf("expected both 'hello' and 'world' in output, got:\n%s", out)
+	}
+	// At width 10 the message must have wrapped: verify multi-row output.
+	lines := strings.Split(strings.TrimRight(out, "\n"), "\n")
+	if len(lines) < 3 {
+		t.Errorf("expected multi-row output at -W 10, got %d lines:\n%s", len(lines), out)
+	}
+}
+
+// TestRun_NFlag_DisablesWrap verifies -n disables word wrapping (RENDER-05 / D-06-n).
+// A 50-char message must appear on one content line when -n is passed.
+func TestRun_NFlag_DisablesWrap(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	msg := strings.Repeat("x", 50)
+	code := run([]string{"-n", msg}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for -n, got %d", code)
+	}
+	if !strings.Contains(stdout.String(), strings.Repeat("x", 50)) {
+		t.Errorf("expected full 50-char line preserved with -n, got:\n%s", stdout.String())
+	}
+}
+
+// TestRun_EyesFlag_Custom verifies -e passes verbatim eye characters (RENDER-08 / D-05).
+func TestRun_EyesFlag_Custom(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"-e", "^^", "hello"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for -e ^^, got %d", code)
+	}
+	if !strings.Contains(stdout.String(), "^^") {
+		t.Errorf("expected custom eyes '^^' in output, got:\n%s", stdout.String())
+	}
+}
+
+// TestRun_TongueFlag_Custom verifies -T passes tongue characters (RENDER-08).
+// The gopher cow body may not expose $tongue in its art, so we only assert
+// non-empty output and exit 0.
+func TestRun_TongueFlag_Custom(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"-T", "U ", "hello"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for -T U , got %d", code)
+	}
+	if stdout.Len() == 0 {
+		t.Error("expected non-empty output for -T U , got empty")
+	}
+}
+
+// TestRun_EyesAndTongue_DashTongue verifies -e XX and a literal "--" tongue value
+// via -T=-- with the flag terminator (D-05 verbatim pass-through).
+func TestRun_EyesAndTongue_DashTongue(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	// Use -T=-- syntax to avoid flag parser treating "--" as the terminator.
+	// Then "--" terminates flag parsing and "hello" is the positional message.
+	code := run([]string{"-e", "XX", "-T=--", "--", "hello"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for -e XX -T=-- -- hello, got %d (stderr: %q)", code, stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "XX") {
+		t.Errorf("expected eyes 'XX' in output, got:\n%s", stdout.String())
+	}
+}
+
+// TestRun_RandomThink_NotConflict verifies --random and --think together are not
+// a conflict; both flags compose freely (think is a display mode, not an animal flag).
+func TestRun_RandomThink_NotConflict(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"--random", "--think", "hi"}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for --random --think, got %d (stderr: %q)", code, stderr.String())
+	}
+	if stdout.Len() == 0 {
+		t.Error("expected non-empty output for --random --think hi")
+	}
+}

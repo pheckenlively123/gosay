@@ -94,3 +94,50 @@ func TestRender_UnknownCow(t *testing.T) {
 		t.Errorf("expected error message to contain 'does-not-exist', got: %v", err)
 	}
 }
+
+// TestRender_WrapAt40Default verifies that a 50-char message wraps to lines <= 40 cols
+// by default (RENDER-05: default wrap width is 40 display columns).
+func TestRender_WrapAt40Default(t *testing.T) {
+	msg := strings.Repeat("x", 50)
+	out, err := Render("default", msg, RenderOpts{})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	// The 50-x string should be hard-broken to "x"*40 + "x"*10 (two lines)
+	// Check that the full 50-char run does NOT appear on a single content line
+	if strings.Contains(out, strings.Repeat("x", 50)) {
+		t.Errorf("expected 50-char message to be wrapped at 40, but found full 50-char line:\n%s", out)
+	}
+	// Both fragments should be present
+	if !strings.Contains(out, strings.Repeat("x", 40)) {
+		t.Errorf("expected 40-char first fragment, got:\n%s", out)
+	}
+	if !strings.Contains(out, strings.Repeat("x", 10)) {
+		t.Errorf("expected 10-char second fragment, got:\n%s", out)
+	}
+}
+
+// TestRender_NoWrap verifies that NoWrap=true preserves the full message on one line.
+func TestRender_NoWrap(t *testing.T) {
+	msg := strings.Repeat("x", 50)
+	out, err := Render("default", msg, RenderOpts{NoWrap: true})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	if !strings.Contains(out, strings.Repeat("x", 50)) {
+		t.Errorf("expected no-wrap to preserve full 50-char line, got:\n%s", out)
+	}
+}
+
+// TestRender_ShortMessageUnchanged verifies a 30-char message is not wrapped (< 40 default).
+func TestRender_ShortMessageUnchanged(t *testing.T) {
+	msg := strings.Repeat("x", 30)
+	out, err := Render("default", msg, RenderOpts{})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	// 30-char message fits within 40-col default — must appear on one line
+	if !strings.Contains(out, strings.Repeat("x", 30)) {
+		t.Errorf("expected 30-char message to appear unchanged on one line, got:\n%s", out)
+	}
+}

@@ -136,5 +136,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. First Runnable | 4/4 | Complete   | 2026-05-21 |
 | 2. Input and Cow Selection | 3/3 | Complete    | 2026-05-30 |
-| 3. Full Flag Surface | 4/4 | Complete   | 2026-05-31 |
+| 3. Full Flag Surface | 4/4 | Complete    | 2026-05-31 |
 | 4. Release Pipeline | 0/TBD | Not started | - |

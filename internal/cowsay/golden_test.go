@@ -107,6 +107,19 @@ func TestGolden_GopherSayCJK(t *testing.T) {
 	g.Assert(t, "cjk_aligned_gopher", []byte(out))
 }
 
+// TestGolden_GopherThink exercises the full think-mode render pipeline for the gopher.
+// Render is called with Think=true; the Render function fills Thoughts="o" automatically
+// (D-11, exercising the threading from Plan 03). The golden captures the ( ) thought
+// bubble with an "o" trail connecting bubble to gopher.
+func TestGolden_GopherThink(t *testing.T) {
+	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
+	out, err := Render("gopher", "hello", RenderOpts{Think: true})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	g.Assert(t, "think_say_hello", []byte(out))
+}
+
 // TestGolden_GopherSayEmpty verifies D-03: an empty message renders a valid empty
 // bubble (top/bottom borders with a single-space interior line) above the gopher.
 // The balloon builder produces this naturally for the empty string; this golden

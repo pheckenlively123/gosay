@@ -141,3 +141,61 @@ func TestRender_ShortMessageUnchanged(t *testing.T) {
 		t.Errorf("expected 30-char message to appear unchanged on one line, got:\n%s", out)
 	}
 }
+
+// TestRender_ThinkMode verifies that Think=true renders a ( ) thought bubble with
+// an "o" thought trail (D-10, D-11), and that say-mode output is unchanged.
+func TestRender_ThinkMode(t *testing.T) {
+	// Think mode: output must contain ( hello ), not < hello >
+	thinkOut, err := Render("default", "hello", RenderOpts{Think: true})
+	if err != nil {
+		t.Fatalf("Render(think=true): %v", err)
+	}
+	if !strings.Contains(thinkOut, "( hello )") {
+		t.Errorf("think mode: expected output to contain '( hello )', got:\n%s", thinkOut)
+	}
+	if strings.Contains(thinkOut, "< hello >") {
+		t.Errorf("think mode: output must NOT contain '< hello >' (say border), got:\n%s", thinkOut)
+	}
+
+	// Think mode sets $thoughts to "o" (D-11).
+	// default.cow trail line: "        $thoughts   ^__^" — after substitution: "        o   ^__^"
+	// Verify the o-substituted trail line appears (not the say-mode backslash trail).
+	if !strings.Contains(thinkOut, "o   ^__^") {
+		t.Errorf("think mode: expected 'o   ^__^' thought trail in output (D-11), got:\n%s", thinkOut)
+	}
+	// Say-mode trail must NOT appear in think output
+	if strings.Contains(thinkOut, `\   ^__^`) {
+		t.Errorf("think mode: say-mode backslash trail '\\   ^__^' must not appear, got:\n%s", thinkOut)
+	}
+
+	// Say mode still uses < > borders and backslash trail (regression check)
+	sayOut, err := Render("default", "hello", RenderOpts{})
+	if err != nil {
+		t.Fatalf("Render(say mode): %v", err)
+	}
+	if !strings.Contains(sayOut, "< hello >") {
+		t.Errorf("say mode: expected '< hello >' border, got:\n%s", sayOut)
+	}
+	if !strings.Contains(sayOut, `\   ^__^`) {
+		t.Errorf("say mode: expected backslash trail '\\   ^__^', got:\n%s", sayOut)
+	}
+
+	// Think vs say produce different outputs (thought trail differs: o vs \)
+	if thinkOut == sayOut {
+		t.Errorf("think-mode and say-mode outputs are identical — thought trail substitution not applied")
+	}
+
+	// Explicit Thoughts override is respected (D-11 edge: only fill "o" when Thoughts is empty)
+	explicitOut, err := Render("default", "hello", RenderOpts{Think: true, Thoughts: "x"})
+	if err != nil {
+		t.Fatalf("Render(think=true, Thoughts=x): %v", err)
+	}
+	// When Thoughts is explicitly set to "x", neither the default "o" nor "\" trail appears
+	if strings.Contains(explicitOut, "o   ^__^") {
+		t.Errorf("explicit Thoughts='x': 'o   ^__^' must not appear when Thoughts overridden, got:\n%s", explicitOut)
+	}
+	// The x-substituted trail line should appear
+	if !strings.Contains(explicitOut, "x   ^__^") {
+		t.Errorf("explicit Thoughts='x': expected 'x   ^__^' trail, got:\n%s", explicitOut)
+	}
+}

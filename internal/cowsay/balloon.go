@@ -50,21 +50,10 @@ func buildBalloon(lines []string, think bool) string {
 
 	// Body lines
 	if think {
-		// Think mode: all lines use ( ) borders — Plan 03 fills this branch.
-		// For now fall through to say-mode branching (think=false until Plan 03).
-		for i, line := range lines {
-			var left, right string
-			switch {
-			case i == 0 && len(lines) == 1:
-				left, right = "<", ">"
-			case i == 0:
-				left, right = "/", "\\"
-			case i == len(lines)-1:
-				left, right = "\\", "/"
-			default:
-				left, right = "|", "|"
-			}
-			fmt.Fprintf(&b, "%s %s %s\n", left, padRight(line, maxWidth), right)
+		// Think mode: every line uses ( ) borders regardless of line count (D-10).
+		// Upstream Perl cowsay construct_balloon: @border qw[ ( ) ( ) ( ) ]
+		for _, line := range lines {
+			fmt.Fprintf(&b, "( %s )\n", padRight(line, maxWidth))
 		}
 	} else if len(lines) == 1 {
 		fmt.Fprintf(&b, "< %s >\n", padRight(lines[0], maxWidth))

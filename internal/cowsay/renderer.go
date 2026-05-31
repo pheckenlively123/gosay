@@ -83,6 +83,12 @@ func Render(animal, message string, opts RenderOpts) (string, error) {
 		wrapWidth = 0 // wrapMessage treats width <= 0 as passthrough
 	}
 
+	// Think mode: set the $thoughts trail to "o" when not explicitly overridden (D-11).
+	// This must happen before substituteVars so the replacement uses the correct character.
+	if opts.Think && opts.Thoughts == "" {
+		opts.Thoughts = "o"
+	}
+
 	// Wrap the message before building the balloon so buildBalloon receives
 	// already-wrapped lines and computes maxWidth on the correct line widths
 	// (Pitfall 3: wrap must run before buildBalloon).

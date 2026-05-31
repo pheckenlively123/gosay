@@ -23,14 +23,18 @@ func padRight(s string, targetWidth int) string {
 	return s + strings.Repeat(" ", targetWidth-w)
 }
 
-// buildBalloon wraps a message in a speech balloon.
-// Single-line messages use "< text >" borders.
-// Multi-line messages use "/ text \" (first), "| text |" (interior), "\ text /" (last).
+// buildBalloon renders already-wrapped lines in a speech balloon.
+// lines must be provided pre-split and pre-wrapped by the caller (Render).
+//
+// When think is true, every line uses "( text )" borders (upstream Perl cowsay
+// think-mode behavior — Plan 03 fills the think border; until then pass false).
+// When think is false:
+//   - Single-line messages use "< text >" borders.
+//   - Multi-line messages use "/ text \" (first), "| text |" (interior), "\ text /" (last).
+//
 // The top border uses underscores and the bottom uses dashes, both of length maxWidth+2.
 // Padding is computed in display columns via padRight so CJK/emoji right borders align.
-func buildBalloon(message string) string {
-	lines := strings.Split(message, "\n")
-
+func buildBalloon(lines []string, think bool) string {
 	// Compute max display width across all lines
 	maxWidth := 0
 	for _, l := range lines {
@@ -45,7 +49,24 @@ func buildBalloon(message string) string {
 	b.WriteString(" " + strings.Repeat("_", maxWidth+2) + " \n")
 
 	// Body lines
-	if len(lines) == 1 {
+	if think {
+		// Think mode: all lines use ( ) borders — Plan 03 fills this branch.
+		// For now fall through to say-mode branching (think=false until Plan 03).
+		for i, line := range lines {
+			var left, right string
+			switch {
+			case i == 0 && len(lines) == 1:
+				left, right = "<", ">"
+			case i == 0:
+				left, right = "/", "\\"
+			case i == len(lines)-1:
+				left, right = "\\", "/"
+			default:
+				left, right = "|", "|"
+			}
+			fmt.Fprintf(&b, "%s %s %s\n", left, padRight(line, maxWidth), right)
+		}
+	} else if len(lines) == 1 {
 		fmt.Fprintf(&b, "< %s >\n", padRight(lines[0], maxWidth))
 	} else {
 		for i, line := range lines {

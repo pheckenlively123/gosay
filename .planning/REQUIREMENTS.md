@@ -37,7 +37,7 @@ Requirements for initial release. Each maps to a roadmap phase.
 - [ ] **RENDER-03**: `$thoughts`, `$eyes`, `$tongue` variables are substituted at render time
 - [ ] **RENDER-04**: Speech bubble renders correctly for both single-line (`< >`) and multi-line (`/ | \`) inputs
 - [ ] **RENDER-05**: Word-wrap defaults to 40 columns; `-W <n>` overrides; `-n` disables wrapping
-- [ ] **RENDER-06**: Bubble sizing uses display-width (`runewidth.StringWidth`), not byte/rune count — CJK / emoji / combining characters render with correct bubble width
+- [x] **RENDER-06**: Bubble sizing uses display-width (`runewidth.StringWidth`), not byte/rune count — CJK / emoji / combining characters render with correct bubble width
 - [ ] **RENDER-07**: `--think` flag swaps to thought-bubble form (`( )` borders, `o` thoughts trail, `$thoughts = "o"`)
 - [ ] **RENDER-08**: `-e <xx>` customises eyes (default `oo`); `-T <xx>` customises tongue (default `  `)
 
@@ -100,7 +100,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RENDER-03 | Phase 1 | Pending |
 | RENDER-04 | Phase 1 | Pending |
 | RENDER-05 | Phase 3 | Pending |
-| RENDER-06 | Phase 3 | Pending |
+| RENDER-06 | Phase 3 | Complete |
 | RENDER-07 | Phase 3 | Pending |
 | RENDER-08 | Phase 3 | Pending |
 | DIST-01 | Phase 4 | Pending |

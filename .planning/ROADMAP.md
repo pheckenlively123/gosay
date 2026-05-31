@@ -98,7 +98,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 03-01-PLAN.md — runewidth display-width fix (RENDER-06): add go-runewidth, swap `displayWidth` body + `padRight` padding, de-skip CJK golden — the shared width primitive the wrap slice depends on
+- [x] 03-01-PLAN.md — runewidth display-width fix (RENDER-06): add go-runewidth, swap `displayWidth` body + `padRight` padding, de-skip CJK golden — the shared width primitive the wrap slice depends on
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -136,5 +136,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. First Runnable | 4/4 | Complete   | 2026-05-21 |
 | 2. Input and Cow Selection | 3/3 | Complete    | 2026-05-30 |
-| 3. Full Flag Surface | 0/4 | Not started | - |
+| 3. Full Flag Surface | 1/4 | In Progress|  |
 | 4. Release Pipeline | 0/TBD | Not started | - |

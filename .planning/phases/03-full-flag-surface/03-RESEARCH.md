@@ -600,22 +600,19 @@ if err := fs.Parse(args); err != nil {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **D-06 sentinel for explicit `-e ""`**
+All three were Claude's-Discretion items; resolved during planning (commit `2a88fd3`).
+
+1. **D-06 sentinel for explicit `-e ""`** — **RESOLVED:** declined. Plan 03-04 Task 1 consciously accepts that `-e ""` maps to the default and does NOT add a `*string`/`EyesSet` sentinel — keeping `main.go` thin per D-06. The verbatim-passthrough decision (D-05) makes this edge pathological and not worth the added surface.
    - What we know: `renderer.go` treats `opts.Eyes == ""` as "use default oo". An explicit `-e ""` is indistinguishable from "flag not passed."
-   - What's unclear: Is this edge case worth addressing with a `*string` sentinel in `RenderOpts`, or is it acceptable to leave `-e ""` mapping to the default?
-   - Recommendation: Use a simple boolean `EyesSet bool` / `TongueSet bool` alongside the string fields, or convert to `*string` (nil = not set, `""` = explicitly empty). The `*string` approach is idiomatic Go for "optional with explicit zero value." Decision is under Claude's Discretion per D-06.
+   - Original recommendation: `*string` or `EyesSet bool`. Rejected in favor of simplicity.
 
-2. **`displayWidth` promotion to `width.go`**
+2. **`displayWidth` promotion to `width.go`** — **RESOLVED:** promoted. Plan 03-02 Task 1 creates `internal/cowsay/wrap.go` housing `wrapMessage`/`wrapWords`/`hardBreak` (and the wrap path's use of `displayWidth`), keeping `balloon.go` focused on border construction.
    - What we know: Both wrap and balloon sizing now call `displayWidth`. Phase 1 D-17 left open whether to move it to its own file.
-   - What's unclear: Does the added complexity justify a new file?
-   - Recommendation: Move `displayWidth`, `padRight`, `wrapMessage`, `wrapWords`, and `hardBreak` to `wrap.go` (or `width.go`). This keeps `balloon.go` focused on border construction. The wrap logic is ~50 lines — appropriate for a small helper file. Claude's Discretion.
 
-3. **`buildBalloon` signature change**
+3. **`buildBalloon` signature change** — **RESOLVED:** changed to `buildBalloon(lines []string, think bool) string`. Plan 03-02 Task 2 makes the signature final (with `think` stubbed to fall through), Plan 03-03 Task 1 fills the `( )` think branch. `Render` calls `wrapMessage` first, then passes `[]string` to `buildBalloon` — both functions stay pure and independently testable.
    - What we know: Currently `buildBalloon(message string) string` with `strings.Split` inside. Phase 3 needs it to accept already-wrapped `[]string` lines and a `think bool`.
-   - What's unclear: Whether to change the signature or wrap inside.
-   - Recommendation: Change to `buildBalloon(lines []string, think bool) string`. `Render` calls `wrapMessage` first, splits on `\n`, then passes `[]string` to `buildBalloon`. This keeps both functions pure and testable.
 
 ---
 

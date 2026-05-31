@@ -303,6 +303,10 @@ func TestHelpText_MentionsRealDefaults(t *testing.T) {
 	if !strings.Contains(helpText, "40") {
 		t.Errorf("help text should advertise the real default wrap width 40, got:\n%s", helpText)
 	}
+	// Effective tongue default is "  " (two spaces; renderer.go substituteVars).
+	if !strings.Contains(helpText, `default "  "`) {
+		t.Errorf("help text should advertise the real default tongue \"  \", got:\n%s", helpText)
+	}
 }
 
 // TestRun_EyesFlag_Custom verifies -e passes verbatim eye characters (RENDER-08 / D-05).

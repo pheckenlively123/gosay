@@ -47,6 +47,25 @@ func formatCowList(names []string) string {
 	return sb.String()
 }
 
+const helpText = `gosay — make a gopher say something
+
+Usage: gosay [flags] [message...]
+
+Flags:
+  -e <eyes>     Set eye characters (default "oo")
+  -f <name>     Select animal from embedded set (default "gopher")
+  -l            List available animals
+  -n            Disable word wrapping (preserve all input whitespace)
+  -T <tongue>   Set tongue characters (default "  ")
+  -W <cols>     Wrap message at this many display columns (default 40)
+  --random      Pick a random animal
+  --think       Use thought bubble ( ) instead of speech bubble < >
+
+Examples:
+  gosay hello
+  echo hi | gosay -f tux
+  gosay --think -e "^^" "thinking..."`
+
 // run assembles the message from args or stdin, renders it, and writes the result.
 // It returns the process exit code so the logic is testable without os.Exit.
 // args is os.Args[1:] (the program arguments, excluding the binary name).
@@ -57,15 +76,31 @@ func run(args []string, stdout, stderr io.Writer) int {
 	var cowName string
 	var listFlag bool
 	var randomFlag bool
+	var wrapWidth int
+	var noWrap bool
+	var think bool
+	var eyes string
+	var tongue string
 	fs.StringVar(&cowName, "f", "gopher", "cow `name` to use")
 	fs.BoolVar(&listFlag, "l", false, "list available cows")
 	fs.BoolVar(&randomFlag, "random", false, "pick a random cow")
+	fs.IntVar(&wrapWidth, "W", 0, "wrap message at this many display `cols` (default 40)")
+	fs.BoolVar(&noWrap, "n", false, "disable word wrapping")
+	fs.BoolVar(&think, "think", false, "use thought bubble instead of speech bubble")
+	fs.StringVar(&eyes, "e", "", "set eye characters (default \"oo\")")
+	fs.StringVar(&tongue, "T", "", "set tongue characters (default \"  \")")
 
-	fs.Usage = func() {
-		fmt.Fprintln(stderr, "usage: gosay [-f name] [-l] [--random] [message...]")
-	}
+	// CRITICAL: no-op before Parse to suppress automatic stderr print on -h/--help.
+	// Without this, flag.FlagSet prints usage to stderr before returning flag.ErrHelp,
+	// causing help to bleed onto stderr (RESEARCH Pattern 4, Pitfall 2).
+	fs.Usage = func() {}
 
 	if err := fs.Parse(args); err != nil {
+		if errors.Is(err, flag.ErrHelp) {
+			fmt.Fprintln(stdout, helpText)
+			return 0
+		}
+		fmt.Fprintln(stderr, "usage: gosay [flags] [message...]")
 		return 1
 	}
 
@@ -120,7 +155,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 		// No positional args — check whether stdin is piped or a TTY.
 		if isTTY(os.Stdin) {
 			// Interactive terminal with no args: print usage and exit.
-			fmt.Fprintln(stderr, "usage: gosay [-f name] [-l] [--random] [message...]")
+			fmt.Fprintln(stderr, "usage: gosay [flags] [message...]")
 			return 1
 		}
 		// Stdin is piped: read it.
@@ -133,7 +168,14 @@ func run(args []string, stdout, stderr io.Writer) int {
 		message = strings.TrimSuffix(string(data), "\n")
 	}
 
-	out, err := cowsay.Render(animal, message, cowsay.RenderOpts{})
+	opts := cowsay.RenderOpts{
+		Eyes:   eyes,
+		Tongue: tongue,
+		Width:  wrapWidth,
+		NoWrap: noWrap,
+		Think:  think,
+	}
+	out, err := cowsay.Render(animal, message, opts)
 	if err != nil {
 		if errors.Is(err, cowsay.ErrUnknownCow) {
 			fmt.Fprintf(stderr, "gosay: unknown cowfile %q\n", animal)

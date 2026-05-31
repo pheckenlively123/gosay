@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: First Runnable** - `gosay "hello"` prints a gopher with a speech bubble; parser, balloon, renderer, and CLI wired end-to-end; cows vendored with NOTICE (completed 2026-05-21)
 - [x] **Phase 2: Input and Cow Selection** - stdin, `-f`, `-l`, `--random`, empty input, error handling (completed 2026-05-30)
-- [ ] **Phase 3: Full Flag Surface** - `--think`, `-W`, `-n`, `-e`, `-T`, runewidth, `-h`/`--help`
+- [x] **Phase 3: Full Flag Surface** - `--think`, `-W`, `-n`, `-e`, `-T`, runewidth, `-h`/`--help` (completed 2026-05-31)
 - [ ] **Phase 4: Release Pipeline** - GoReleaser, GitHub Actions, `--version`, `go install`
 
 ## Phase Details
@@ -110,7 +110,7 @@ Plans:
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 03-04-PLAN.md — CLI wiring (RENDER-08 + HELP-01): register `-W`/`-n`/`--think`/`-e`/`-T`, `flag.ErrHelp` → stdout help + exit 0, thread all opts into `RenderOpts`, eyes/tongue golden + CLI tests
+- [x] 03-04-PLAN.md — CLI wiring (RENDER-08 + HELP-01): register `-W`/`-n`/`--think`/`-e`/`-T`, `flag.ErrHelp` → stdout help + exit 0, thread all opts into `RenderOpts`, eyes/tongue golden + CLI tests
 
 ### Phase 4: Release Pipeline
 
@@ -136,5 +136,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. First Runnable | 4/4 | Complete   | 2026-05-21 |
 | 2. Input and Cow Selection | 3/3 | Complete    | 2026-05-30 |
-| 3. Full Flag Surface | 3/4 | In Progress|  |
+| 3. Full Flag Surface | 4/4 | Complete   | 2026-05-31 |
 | 4. Release Pipeline | 0/TBD | Not started | - |

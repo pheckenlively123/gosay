@@ -9,6 +9,7 @@ func TestBuildBalloon(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    string
+		think    bool
 		expected string
 	}{
 		{
@@ -48,16 +49,37 @@ func TestBuildBalloon(t *testing.T) {
 			// "muchlonger" is 10 chars; "short" (5 chars) is padded with 5 spaces
 			expected: " ____________ \n/ short      \\\n\\ muchlonger /\n ------------ \n",
 		},
+		// Think-mode cases (D-10): every line uses ( ) borders regardless of line count.
+		{
+			name:     "think_single_hello",
+			input:    "hello",
+			think:    true,
+			expected: " _______ \n( hello )\n ------- \n",
+		},
+		{
+			name:  "think_two_line",
+			input: "line1\nline2",
+			think: true,
+			// Both lines use ( ) borders, each padded to maxWidth (5)
+			expected: " _______ \n( line1 )\n( line2 )\n ------- \n",
+		},
+		{
+			name:  "think_three_line",
+			input: "a\nb\nc",
+			think: true,
+			// All three lines use ( ) borders — no / | \ in think mode
+			expected: " ___ \n( a )\n( b )\n( c )\n --- \n",
+		},
 	}
 
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			// buildBalloon now accepts already-split []string lines and a think bool.
-			got := buildBalloon(strings.Split(tc.input, "\n"), false)
+			got := buildBalloon(strings.Split(tc.input, "\n"), tc.think)
 			if got != tc.expected {
-				t.Errorf("buildBalloon(%q) mismatch:\nexpected:\n`%s`\ngot:\n`%s`",
-					tc.input, tc.expected, got)
+				t.Errorf("buildBalloon(%q, think=%v) mismatch:\nexpected:\n`%s`\ngot:\n`%s`",
+					tc.input, tc.think, tc.expected, got)
 			}
 		})
 	}

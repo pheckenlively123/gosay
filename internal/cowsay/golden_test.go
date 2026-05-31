@@ -120,6 +120,18 @@ func TestGolden_GopherSayEmpty(t *testing.T) {
 	g.Assert(t, "gopher_say_empty", []byte(out))
 }
 
+// TestGolden_GopherWrap verifies that a long message is word-wrapped at 40 display columns
+// by default (RENDER-05 / D-01). The fixture captures the multi-line balloon so regressions
+// in the wrap-before-balloon path are detected.
+func TestGolden_GopherWrap(t *testing.T) {
+	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
+	out, err := Render("gopher", "a long message that should wrap at forty columns", RenderOpts{Width: 40})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	g.Assert(t, "wrap_long_message", []byte(out))
+}
+
 // TestListCows_IncludesGopher is a regression assertion that gopher.cow actually
 // landed in the embedded cow set after Plan 01-04 added it.
 func TestListCows_IncludesGopher(t *testing.T) {

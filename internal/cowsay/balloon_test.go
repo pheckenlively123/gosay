@@ -68,9 +68,8 @@ func TestDisplayWidth(t *testing.T) {
 	}{
 		{"hello", 5},
 		{"", 0},
-		// Phase 3 swaps the body to runewidth.StringWidth which would return 4 here;
-		// this test is the contract that documents the Phase 1 limitation.
-		{"漢字", 2},
+		// Phase 3: runewidth.StringWidth returns 4 for two CJK chars (2 display cols each).
+		{"漢字", 4},
 	}
 
 	for _, tc := range tests {

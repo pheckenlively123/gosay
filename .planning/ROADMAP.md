@@ -106,7 +106,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 03-03-PLAN.md — Think mode (RENDER-07): `( )` border branch in `buildBalloon`, `RenderOpts.Think` + `Thoughts="o"` threading, think golden
+- [x] 03-03-PLAN.md — Think mode (RENDER-07): `( )` border branch in `buildBalloon`, `RenderOpts.Think` + `Thoughts="o"` threading, think golden
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -136,5 +136,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. First Runnable | 4/4 | Complete   | 2026-05-21 |
 | 2. Input and Cow Selection | 3/3 | Complete    | 2026-05-30 |
-| 3. Full Flag Surface | 2/4 | In Progress|  |
+| 3. Full Flag Surface | 3/4 | In Progress|  |
 | 4. Release Pipeline | 0/TBD | Not started | - |

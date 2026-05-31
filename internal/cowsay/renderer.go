@@ -19,7 +19,7 @@ type RenderOpts struct {
 	Eyes     string // default "oo"
 	Tongue   string // default "  " (two spaces)
 	Thoughts string // default "\" (single backslash, say mode) or "o" (think mode set by main.go)
-	Width    int    // wrap width; 0 = use default 40; ignored when NoWrap is true
+	Width    int    // wrap width in display columns; any value <= 0 is coerced to the default 40 (unless NoWrap); ignored when NoWrap is true
 	NoWrap   bool   // -n flag: skip wrapping entirely
 	Think    bool   // --think: use ( ) borders; Plan 03 fills the branch; Plan 04 wires the flag
 }

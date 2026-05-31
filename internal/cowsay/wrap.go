@@ -8,7 +8,12 @@ import (
 )
 
 // wrapMessage preserves existing newlines then word-wraps each resulting line.
-// width <= 0 means no-wrap (pass through with newlines preserved).
+// width <= 0 is the no-wrap sentinel (pass through with newlines preserved).
+// Callers (Render) are responsible for resolving real widths before calling:
+// a positive wrap width is passed through, while both the -n flag and a
+// non-positive RenderOpts.Width are mapped onto this sentinel / the default 40
+// upstream. This function does not distinguish "explicit no-wrap" from "invalid
+// width"; that resolution is Render's job.
 func wrapMessage(message string, width int) string {
 	if width <= 0 {
 		return message

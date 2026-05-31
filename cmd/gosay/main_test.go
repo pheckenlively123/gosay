@@ -273,6 +273,38 @@ func TestRun_NFlag_DisablesWrap(t *testing.T) {
 	}
 }
 
+// TestRun_NFlag_OverridesWFlag verifies that -n wins when combined with -W: the
+// documented precedence ("-n ... overrides -W", main.go help text) means a long
+// message stays on a single content line even though -W would otherwise wrap it
+// (renderer.go zeroes width when NoWrap). Locks in the combined-flag contract.
+func TestRun_NFlag_OverridesWFlag(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	msg := strings.Repeat("x", 50)
+	code := run([]string{"-n", "-W", "10", msg}, &stdout, &stderr)
+	if code != 0 {
+		t.Errorf("expected exit code 0 for -n -W 10, got %d (stderr: %q)", code, stderr.String())
+	}
+	// -n must win: the full 50-char message stays unwrapped on one line.
+	if !strings.Contains(stdout.String(), strings.Repeat("x", 50)) {
+		t.Errorf("expected -n to override -W 10 and preserve the full 50-char line, got:\n%s", stdout.String())
+	}
+}
+
+// TestHelpText_MentionsRealDefaults guards against the hand-maintained help text
+// drifting from the effective defaults resolved downstream (substituteVars / Render).
+// If a default changes there, this test should be updated in lockstep — and fails
+// loudly if the help string silently goes stale (review L2).
+func TestHelpText_MentionsRealDefaults(t *testing.T) {
+	// Effective eyes default is "oo" (renderer.go substituteVars).
+	if !strings.Contains(helpText, `"oo"`) {
+		t.Errorf("help text should advertise the real default eyes \"oo\", got:\n%s", helpText)
+	}
+	// Effective default wrap width is 40 (renderer.go Render).
+	if !strings.Contains(helpText, "40") {
+		t.Errorf("help text should advertise the real default wrap width 40, got:\n%s", helpText)
+	}
+}
+
 // TestRun_EyesFlag_Custom verifies -e passes verbatim eye characters (RENDER-08 / D-05).
 func TestRun_EyesFlag_Custom(t *testing.T) {
 	var stdout, stderr bytes.Buffer

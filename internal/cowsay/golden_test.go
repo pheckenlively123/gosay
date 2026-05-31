@@ -145,6 +145,19 @@ func TestGolden_GopherWrap(t *testing.T) {
 	g.Assert(t, "wrap_long_message", []byte(out))
 }
 
+// TestGolden_GopherCustomEyesTongue verifies verbatim -e/-T substitution for the
+// gopher cow (RENDER-08 / D-05). Eyes "^^" and tongue "U " replace the defaults
+// in the gopher body; the golden captures the full render so any regression in
+// the substituteVars replacer is detected.
+func TestGolden_GopherCustomEyesTongue(t *testing.T) {
+	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
+	out, err := Render("gopher", "hello", RenderOpts{Eyes: "^^", Tongue: "U "})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	g.Assert(t, "custom_eyes_tongue", []byte(out))
+}
+
 // TestListCows_IncludesGopher is a regression assertion that gopher.cow actually
 // landed in the embedded cow set after Plan 01-04 added it.
 func TestListCows_IncludesGopher(t *testing.T) {

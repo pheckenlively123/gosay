@@ -123,7 +123,9 @@ func run(args []string, stdout, stderr io.Writer) int {
 	// Reject an explicitly non-positive -W. An unset -W (0) is the "use default 40"
 	// sentinel resolved in Render; but a user who explicitly asks for -W 0 or a
 	// negative width gets a usage error rather than a silent fallback to 40.
-	if wExplicit && wrapWidth < 1 {
+	// Exception: -n disables wrapping and (per the help text) overrides -W, so a
+	// non-positive -W alongside -n is honored rather than rejected.
+	if wExplicit && wrapWidth < 1 && !noWrap {
 		fmt.Fprintln(stderr, "gosay: -W must be a positive number of columns")
 		return 1
 	}

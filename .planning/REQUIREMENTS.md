@@ -36,10 +36,10 @@ Requirements for initial release. Each maps to a roadmap phase.
 - [ ] **RENDER-02**: Heredoc body has Perl backslash sequences unescaped (`\\` → `\`, `\@` → `@`, `\$` → `$`)
 - [ ] **RENDER-03**: `$thoughts`, `$eyes`, `$tongue` variables are substituted at render time
 - [ ] **RENDER-04**: Speech bubble renders correctly for both single-line (`< >`) and multi-line (`/ | \`) inputs
-- [ ] **RENDER-05**: Word-wrap defaults to 40 columns; `-W <n>` overrides; `-n` disables wrapping
-- [ ] **RENDER-06**: Bubble sizing uses display-width (`runewidth.StringWidth`), not byte/rune count — CJK / emoji / combining characters render with correct bubble width
-- [ ] **RENDER-07**: `--think` flag swaps to thought-bubble form (`( )` borders, `o` thoughts trail, `$thoughts = "o"`)
-- [ ] **RENDER-08**: `-e <xx>` customises eyes (default `oo`); `-T <xx>` customises tongue (default `  `)
+- [x] **RENDER-05**: Word-wrap defaults to 40 columns; `-W <n>` overrides; `-n` disables wrapping
+- [x] **RENDER-06**: Bubble sizing uses display-width (`runewidth.StringWidth`), not byte/rune count — CJK / emoji / combining characters render with correct bubble width
+- [x] **RENDER-07**: `--think` flag swaps to thought-bubble form (`( )` borders, `o` thoughts trail, `$thoughts = "o"`)
+- [x] **RENDER-08**: `-e <xx>` customises eyes (default `oo`); `-T <xx>` customises tongue (default `  `)
 
 ### Distribution
 
@@ -51,7 +51,7 @@ Requirements for initial release. Each maps to a roadmap phase.
 
 ### Help & Usability
 
-- [ ] **HELP-01**: `-h` / `--help` prints usage with every flag documented and example invocations
+- [x] **HELP-01**: `-h` / `--help` prints usage with every flag documented and example invocations
 
 ## v2 Requirements
 
@@ -99,16 +99,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RENDER-02 | Phase 1 | Pending |
 | RENDER-03 | Phase 1 | Pending |
 | RENDER-04 | Phase 1 | Pending |
-| RENDER-05 | Phase 3 | Pending |
-| RENDER-06 | Phase 3 | Pending |
-| RENDER-07 | Phase 3 | Pending |
-| RENDER-08 | Phase 3 | Pending |
+| RENDER-05 | Phase 3 | Complete |
+| RENDER-06 | Phase 3 | Complete |
+| RENDER-07 | Phase 3 | Complete |
+| RENDER-08 | Phase 3 | Complete |
 | DIST-01 | Phase 4 | Pending |
 | DIST-02 | Phase 4 | Pending |
 | DIST-03 | Phase 4 | Pending |
 | DIST-04 | Phase 4 | Pending |
 | DIST-05 | Phase 4 | Pending |
-| HELP-01 | Phase 3 | Pending |
+| HELP-01 | Phase 3 | Complete |
 
 **Coverage:**
 

@@ -88,26 +88,36 @@ func TestGolden_NonEOCSayHello(t *testing.T) {
 	// Drive substitution through the production substituteVars helper, and apply the
 	// same trailing-newline normalization Render performs, so this fixture-based test
 	// stays in lockstep with the production render path.
-	balloon := buildBalloon("hello")
+	balloon := buildBalloon(strings.Split("hello", "\n"), false)
 	substituted := substituteVars(body, RenderOpts{})
 	out := strings.TrimRight(balloon+substituted, "\n") + "\n"
 	g.Assert(t, "non_eoc_say_hello", []byte(out))
 }
 
-// TestGolden_CJK_Skipped documents the Phase 1 CJK display-width gap.
-// gosay's Phase 1 displayWidth uses utf8.RuneCountInString which under-pads the
-// balloon for CJK input (each CJK rune occupies 2 terminal columns but counts as 1).
-// This test exists to document the gap and will be enabled in Phase 3 / RENDER-06
-// when displayWidth is swapped to runewidth.StringWidth.
-func TestGolden_CJK_Skipped(t *testing.T) {
-	t.Skip("CJK display width requires runewidth (Phase 3 / RENDER-06); gosay's Phase 1 displayWidth uses utf8.RuneCountInString which under-pads the balloon for CJK input — this test exists to document the gap, will be enabled in Phase 3")
+// TestGolden_GopherSayCJK verifies that the CJK bubble aligns correctly after the
+// Phase 3 / RENDER-06 displayWidth swap to runewidth.StringWidth.
+// 漢字テスト = 5 CJK chars, each 2 display columns wide = 10 total display columns.
+// The right border must align with the top/bottom borders (width 12 = 10 + 2).
+func TestGolden_GopherSayCJK(t *testing.T) {
 	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
-	// 漢字テスト = 漢字テスト
 	out, err := Render("gopher", "漢字テスト", RenderOpts{})
 	if err != nil {
 		t.Fatalf("Render: %v", err)
 	}
-	g.Assert(t, "cjk_skip", []byte(out))
+	g.Assert(t, "cjk_aligned_gopher", []byte(out))
+}
+
+// TestGolden_GopherThink exercises the full think-mode render pipeline for the gopher.
+// Render is called with Think=true; the Render function fills Thoughts="o" automatically
+// (D-11, exercising the threading from Plan 03). The golden captures the ( ) thought
+// bubble with an "o" trail connecting bubble to gopher.
+func TestGolden_GopherThink(t *testing.T) {
+	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
+	out, err := Render("gopher", "hello", RenderOpts{Think: true})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	g.Assert(t, "think_say_hello", []byte(out))
 }
 
 // TestGolden_GopherSayEmpty verifies D-03: an empty message renders a valid empty
@@ -121,6 +131,31 @@ func TestGolden_GopherSayEmpty(t *testing.T) {
 		t.Fatalf("Render: %v", err)
 	}
 	g.Assert(t, "gopher_say_empty", []byte(out))
+}
+
+// TestGolden_GopherWrap verifies that a long message is word-wrapped at 40 display columns
+// by default (RENDER-05 / D-01). The fixture captures the multi-line balloon so regressions
+// in the wrap-before-balloon path are detected.
+func TestGolden_GopherWrap(t *testing.T) {
+	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
+	out, err := Render("gopher", "a long message that should wrap at forty columns", RenderOpts{Width: 40})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	g.Assert(t, "wrap_long_message", []byte(out))
+}
+
+// TestGolden_GopherCustomEyesTongue verifies verbatim -e/-T substitution for the
+// gopher cow (RENDER-08 / D-05). Eyes "^^" and tongue "U " replace the defaults
+// in the gopher body; the golden captures the full render so any regression in
+// the substituteVars replacer is detected.
+func TestGolden_GopherCustomEyesTongue(t *testing.T) {
+	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
+	out, err := Render("gopher", "hello", RenderOpts{Eyes: "^^", Tongue: "U "})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	g.Assert(t, "custom_eyes_tongue", []byte(out))
 }
 
 // TestListCows_IncludesGopher is a regression assertion that gopher.cow actually

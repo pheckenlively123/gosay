@@ -17,13 +17,14 @@ A single, fast, dependency-free Go binary that reproduces the fun of `cowsay` �
 - [x] CLI accepts a message as argument *and* via stdin (`echo hello | gosay`) — *Validated in Phase 2: Input and Cow Selection (arg path in Phase 1)*
 - [x] `-f <name>` selects a specific animal from the embedded set — *Validated in Phase 2: Input and Cow Selection*
 - [x] `-l` lists every embedded animal name — *Validated in Phase 2: Input and Cow Selection*
+- [x] `cowthink` behavior available (thought-bubble variant via `--think`) — *Validated in Phase 3: Full Flag Surface*
+- [x] Full flag surface: word wrap (`-W`/`-n`), custom eyes/tongue (`-e`/`-T`), Unicode-correct bubble sizing (runewidth), and `-h`/`--help` — *Validated in Phase 3: Full Flag Surface*
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
 - [ ] Default animal is a gopher (not a cow)
-- [ ] `cowthink` behavior available (thought-bubble variant — likely a `-t/--think` flag or sibling command)
 - [ ] Full upstream cowsay `.cow` files vendored into the repo and embedded with `//go:embed`
 - [ ] Cross-platform binaries (linux / macOS / windows, amd64 + arm64) built and published by a GitHub Actions release workflow
 
@@ -83,4 +84,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-30 — Phase 2 (Input and Cow Selection) complete*
+*Last updated: 2026-05-31 — Phase 3 (Full Flag Surface) complete*

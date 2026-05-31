@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: First Runnable** - `gosay "hello"` prints a gopher with a speech bubble; parser, balloon, renderer, and CLI wired end-to-end; cows vendored with NOTICE (completed 2026-05-21)
 - [x] **Phase 2: Input and Cow Selection** - stdin, `-f`, `-l`, `--random`, empty input, error handling (completed 2026-05-30)
-- [ ] **Phase 3: Full Flag Surface** - `--think`, `-W`, `-n`, `-e`, `-T`, runewidth, `-h`/`--help`
+- [x] **Phase 3: Full Flag Surface** - `--think`, `-W`, `-n`, `-e`, `-T`, runewidth, `-h`/`--help` (completed 2026-05-31)
 - [ ] **Phase 4: Release Pipeline** - GoReleaser, GitHub Actions, `--version`, `go install`
 
 ## Phase Details
@@ -94,7 +94,23 @@ Plans:
   4. `echo "漢字テスト" | gosay` produces a bubble whose right edge aligns correctly — `runewidth.StringWidth` used throughout, not `len()`
   5. `gosay -h` (and `gosay --help`) prints usage documentation covering every flag with example invocations
 
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+**Wave 1**
+
+- [x] 03-01-PLAN.md — runewidth display-width fix (RENDER-06): add go-runewidth, swap `displayWidth` body + `padRight` padding, de-skip CJK golden — the shared width primitive the wrap slice depends on
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [x] 03-02-PLAN.md — Word wrap (RENDER-05): new `wrap.go` (display-width greedy wrap + hard-break), `RenderOpts.Width/NoWrap`, `buildBalloon([]string, bool)` signature, wrap step in `Render`, wrapped golden
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [x] 03-03-PLAN.md — Think mode (RENDER-07): `( )` border branch in `buildBalloon`, `RenderOpts.Think` + `Thoughts="o"` threading, think golden
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [x] 03-04-PLAN.md — CLI wiring (RENDER-08 + HELP-01): register `-W`/`-n`/`--think`/`-e`/`-T`, `flag.ErrHelp` → stdout help + exit 0, thread all opts into `RenderOpts`, eyes/tongue golden + CLI tests
 
 ### Phase 4: Release Pipeline
 
@@ -120,5 +136,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. First Runnable | 4/4 | Complete   | 2026-05-21 |
 | 2. Input and Cow Selection | 3/3 | Complete    | 2026-05-30 |
-| 3. Full Flag Surface | 0/TBD | Not started | - |
+| 3. Full Flag Surface | 4/4 | Complete    | 2026-05-31 |
 | 4. Release Pipeline | 0/TBD | Not started | - |

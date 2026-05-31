@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0.0
 milestone_name: milestone
-status: completed
-stopped_at: Phase 02 Plan 03 complete — -l listing, --random selection, and conflict guards
-last_updated: "2026-05-30T23:40:45.008Z"
-last_activity: 2026-05-30
+status: executing
+stopped_at: Completed 03-full-flag-surface 03-01-PLAN.md
+last_updated: "2026-05-31T17:41:57.843Z"
+last_activity: 2026-05-31
 progress:
   total_phases: 4
-  completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
-  percent: 50
+  completed_phases: 3
+  total_plans: 11
+  completed_plans: 11
+  percent: 75
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-18)
 
 **Core value:** A single, fast, dependency-free Go binary that reproduces the fun of `cowsay` — message in, ASCII animal out — with no Perl, no external `.cow` files, and a gopher on by default.
-**Current focus:** Phase 02 — input-and-cow-selection
+**Current focus:** Phase 03 — full-flag-surface
 
 ## Current Position
 
-Phase: 3
+Phase: 4
 Plan: Not started
-Status: Phase 2 complete; ready for Phase 3
-Last activity: 2026-05-30
+Status: Executing Phase 03
+Last activity: 2026-05-31
 
 Progress: [█████████████░] 100% of Phase 2 (7/7 plans complete)
 
@@ -36,7 +36,7 @@ Progress: [█████████████░] 100% of Phase 2 (7/7 plan
 
 **Velocity:**
 
-- Total plans completed: 3
+- Total plans completed: 7
 - Average duration: —
 - Total execution time: —
 
@@ -45,6 +45,7 @@ Progress: [█████████████░] 100% of Phase 2 (7/7 plan
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 02 | 3 | - | - |
+| 03 | 4 | - | - |
 
 **Recent Trend:**
 
@@ -57,6 +58,7 @@ Progress: [█████████████░] 100% of Phase 2 (7/7 plan
 |-------|------|----------|-------|-------|
 | 02 | 02-02 | 20m | 2 | 4 |
 | 02 | 02-03 | 15m | 2 | 2 |
+| Phase 03-full-flag-surface P03-01 | 18m | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -72,6 +74,7 @@ Recent decisions affecting current work:
 - Roadmap: `go-runewidth` is the one justified external dependency; pulled in during Phase 3
 - 02-03: Use fs.Visit for explicit -f detection to avoid false positive when gopher is default
 - 02-03: formatCowList() helper with 76-char wrap matches upstream cowsay column shape (D-07)
+- [Phase ?]: D-07/D-08: runewidth.StringWidth + padRight replaces utf8.RuneCountInString + %-*s; both changes must land together for CJK alignment (RENDER-06)
 
 ### Pending Todos
 
@@ -90,7 +93,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-30T23:59:00.000Z
-Stopped at: Phase 02 Plan 03 complete — -l listing, --random selection, and conflict guards
-Resume file: .planning/phases/02-input-and-cow-selection/02-03-SUMMARY.md
+Last session: 2026-05-31T16:51:13.447Z
+Stopped at: Completed 03-full-flag-surface 03-01-PLAN.md
+Resume file: None
 Next step: Execute Phase 3 (Full Flag Surface — --think, -W, -n, -e, -T, runewidth, -h/--help)

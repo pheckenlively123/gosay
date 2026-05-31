@@ -88,7 +88,7 @@ func TestGolden_NonEOCSayHello(t *testing.T) {
 	// Drive substitution through the production substituteVars helper, and apply the
 	// same trailing-newline normalization Render performs, so this fixture-based test
 	// stays in lockstep with the production render path.
-	balloon := buildBalloon("hello")
+	balloon := buildBalloon(strings.Split("hello", "\n"), false)
 	substituted := substituteVars(body, RenderOpts{})
 	out := strings.TrimRight(balloon+substituted, "\n") + "\n"
 	g.Assert(t, "non_eoc_say_hello", []byte(out))
@@ -118,6 +118,18 @@ func TestGolden_GopherSayEmpty(t *testing.T) {
 		t.Fatalf("Render: %v", err)
 	}
 	g.Assert(t, "gopher_say_empty", []byte(out))
+}
+
+// TestGolden_GopherWrap verifies that a long message is word-wrapped at 40 display columns
+// by default (RENDER-05 / D-01). The fixture captures the multi-line balloon so regressions
+// in the wrap-before-balloon path are detected.
+func TestGolden_GopherWrap(t *testing.T) {
+	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
+	out, err := Render("gopher", "a long message that should wrap at forty columns", RenderOpts{Width: 40})
+	if err != nil {
+		t.Fatalf("Render: %v", err)
+	}
+	g.Assert(t, "wrap_long_message", []byte(out))
 }
 
 // TestListCows_IncludesGopher is a regression assertion that gopher.cow actually

@@ -1,6 +1,7 @@
 package cowsay
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -52,7 +53,8 @@ func TestBuildBalloon(t *testing.T) {
 	for _, tc := range tests {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			got := buildBalloon(tc.input)
+			// buildBalloon now accepts already-split []string lines and a think bool.
+			got := buildBalloon(strings.Split(tc.input, "\n"), false)
 			if got != tc.expected {
 				t.Errorf("buildBalloon(%q) mismatch:\nexpected:\n`%s`\ngot:\n`%s`",
 					tc.input, tc.expected, got)

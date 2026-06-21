@@ -1,20 +1,21 @@
 ##
-## gopher.cow — hand-authored original ASCII art for the gosay project
+## gopher.cow — the Go gopher, redrawn after the Renée French mascot:
+## wide-set round eyes, buck teeth, and two little feet.
+## Reference art: Go-gopher-Vector/svg/gopher01bw.svg
 ##
 $the_cow = <<EOC;
-     $thoughts
-      $thoughts  .-----.
-               / ($eyes) \
-              |  .---.  |
-              |  | $tongue |  |
-               \ `---' /
-           ,--/`-----'\--.
-          /  |         |  \
-         / \ |  ,---.  | / \
-        /   \| /     \ |/   \
-       |     |/  ,-,  \|     |
-        \    /  /   \  \    /
-         `--' .-`   '-.  `--'
-              |  | |  |
-              `--' `--'
+   $thoughts      _____     _____
+    $thoughts    /     \   /     \
+       _/  | $eyes |   | $eyes |  \_
+      /     \_____/ ^ \_____/     \
+     |            -WW-            |
+     |            ($tongue)            |
+      \                        /
+       |                      |
+       |                      |
+        \                    /
+         '.                .'
+          | |          | |
+         _| |          | |_
+        (___)          (___)
 EOC
